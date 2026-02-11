@@ -1,4 +1,4 @@
-from Connection import Connection
+from .Connection import Connection
 from GeneralFunctions import CreateUniqueKeyForMap
 
 
@@ -7,7 +7,7 @@ class Event:
         self.cbs = {}
 
     def _FireEvent(self, *args):
-        for _, cb in self.cbs:
+        for cb in self.cbs.values():
             cb(*args)
 
     def Once(self, cb):

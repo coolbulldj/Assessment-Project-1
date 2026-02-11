@@ -1,26 +1,51 @@
+from ..SuperClass import SuperClass
 import pygame as py
 
+guiAssetList = []
 
-class GUIBase():
+class GUIBase(SuperClass):
 
-    def __init__(self, Pos, Size, Color, UIAspectRatio:float=None): #UI Aspect Ratio the main axis is x
+    def __init__(self, Pos, Size, Color, ClassName, zIndex:int=1, UIAspectRatio:float=None): #UI Aspect Ratio the main axis is x, also size being limited on the x-axis
+        super().__init__(ClassName, {"Pos", "Size", "BackgroundColor", "zIndex", "UIAspectRatio"}, {})
         self.Pos = Pos
         self.Size = Size
         self.BackgroundColor = Color
+        self.zIndex = zIndex
         self.UIAspectRatio = UIAspectRatio
+        guiAssetList.append(self)
 
     def refresh(self, screen):
         
         ScreenWidth, ScreenHeight = screen.get_size()
 
-        x, y = self.Pos
         xs, ys = self.Size
-        #rel_x, rel_y = x, y
-        rel_x, rel_y = (x - xs/2, y - ys/2)
-        #Apply real absolute position & size
-        rel_x, rel_y = rel_x * ScreenWidth, rel_y * ScreenHeight
+
         xs, ys = xs * ScreenWidth, ys * ScreenHeight
 
-        rectDetails = py.Rect(rel_x, rel_y, xs, ys)
+        xp, yp = self.Pos
+
+        #Check for aspect ratio
+        if self.UIAspectRatio:
+            ys = xs * self.UIAspectRatio
+
+        xp, yp = xp * ScreenWidth - xs/2, yp * ScreenHeight - ys/2
+
+        rectDetails = py.Rect(xp, yp, xs, ys)
 
         py.draw.rect(screen, self.BackgroundColor, rectDetails, 0)
+
+def GetGuiAssets():
+    global guiAssetList
+
+    sortedAssetList = []
+    sortedAssetDic = {}
+    for guiItem in guiAssetList:
+        if guiItem.zIndex not in sortedAssetDic:
+            sortedAssetDic[guiItem.zIndex] = []
+        sortedAssetDic[guiItem.zIndex].append(guiItem)
+    
+    for row in sortedAssetDic:
+        for item in row:
+            sortedAssetList.append(item)
+
+    return sortedAssetList

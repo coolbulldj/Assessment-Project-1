@@ -19,6 +19,7 @@ class SuperClass():
 
         if not hasattr(self, name) and name not in self.ValidProperties:
             print(f"WARNING: The Property:{name} is not a valid property of Class:{self.ClassName}")
+        super().__setattr__(name, value)
 
     def GetPropertyChangedSignal(self, property:str):
         if property not in self.SignalProperties:

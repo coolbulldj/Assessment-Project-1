@@ -4,7 +4,7 @@ from Classes.GUIClasses.GUIBase import GUIBase
 
 screen = py.display.set_mode((200, 200), py.RESIZABLE)
 
-guiObject = GUIBase((0.5, 0.5), (0.25, 0.25), (255,0, 0))
+guiObject = GUIBase((0.5, 0.5), (0.25, 0.25), (255,0, 0), 1, 1)
 
 running = True
 

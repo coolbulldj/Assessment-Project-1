@@ -1,13 +1,9 @@
 import time
 
 from Classes.EventClass import Event
+from Classes.SuperClass import SuperClass
 
+main = SuperClass("SuperClass", {"ts"})
 
-
-ranconnet = Event()
-
-ranconnet.Once(lambda: print("hello world"))
-
-time.sleep(3)
-
-ranconnet._FireEvent()
+main.Bs = "ts"
+main.ClassName = "No Longer Super"

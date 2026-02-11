@@ -58,22 +58,24 @@ def SellItems():
         if OreToSell <= oreInStorage:
             break
         print("You do not have that much ore to sell")
-    
+
     oreInStorage -= OreToSell
     Money += OreToSell * OrePrice
 
     MinesToSell = 10000
     while True:
-        MinesToSell = GetInt("How many mines do you want to sell? ") #"How many mines do you want to sell? "
- 
+        MinesToSell = GetInt(
+            "How many mines do you want to sell? "
+        )  # "How many mines do you want to sell? "
+
         if MinesToSell is None:
             continue
-        
+
         if MinesToSell <= NumberOfMines:
             break
-        #print(MinesToSell, NumberOfMines)
+        # print(MinesToSell, NumberOfMines)
         print("You do not have that many mines to sell")
-    
+
     NumberOfMines -= MinesToSell
     Money += MinesToSell * MinePrice
 
@@ -93,47 +95,47 @@ def BuyItems():
         if FoodToBuy <= Money:
             break
         print("You do not have enough money to buy that much food!")
-    
+
     Money -= FoodToBuy
 
-    currentSafication += ((FoodToBuy/Population) - 1)
-
-
+    currentSafication += (FoodToBuy / Population) - 1
 
     MinesToBuy = 10000
     while True:
-        MinesToBuy = GetInt("How many mines do you want to buy? ") #"How many mines do you want to sell? "
+        MinesToBuy = GetInt(
+            "How many mines do you want to buy? "
+        )  # "How many mines do you want to sell? "
 
         if not MinesToBuy:
             continue
 
-        if MinesToBuy*MinePrice <= Money:
+        if MinesToBuy * MinePrice <= Money:
             break
         print("You do not have enough money to buy that many mines!")
-    
+
     NumberOfMines += MinesToBuy
     Money -= MinesToBuy * MinePrice
 
 
 while True:
     currentYear += 1
-    #Randomise Ore & Mine price
-    OrePrice = random.randint(1,12) + 7
-    MinePrice = random.randint(1,2000) + 2000
+    # Randomise Ore & Mine price
+    OrePrice = random.randint(1, 12) + 7
+    MinePrice = random.randint(1, 2000) + 2000
 
     DisplayStateOfAffairs()
-    #Add ore produced
+    # Add ore produced
     oreInStorage += OreProducion * NumberOfMines
     SellItems()
     print(f"Current Balance {Money}")
     BuyItems()
-    #Apply effects of satifaction value
+    # Apply effects of satifaction value
     if currentSafication > 1.1:
-        OreProducion += random.randint(1,20) + 1
-    elif currentSafication < .9:
-        OreProducion -= random.randint(1,20) + 1
-    
-    #Events
+        OreProducion += random.randint(1, 20) + 1
+    elif currentSafication < 0.9:
+        OreProducion -= random.randint(1, 20) + 1
+
+    # Events
     if random.random() < 0.05:
         print("Radioactive leak .... many die")
         Population /= 2
@@ -143,12 +145,14 @@ while True:
         OrePrice /= 2
         OrePrice = math.floor(OrePrice)
 
-    #Ways to lose
+    # Ways to lose
     if currentSafication < 0.6:
         print("Your people revolted")
         break
-    elif Population/NumberOfMines < 10:
-        print("Your've overworked your population you require ten people per each of your mines")
+    elif Population / NumberOfMines < 10:
+        print(
+            "Your've overworked your population you require ten people per each of your mines"
+        )
         break
     elif Population < 30:
         print("You don't have enough people left")

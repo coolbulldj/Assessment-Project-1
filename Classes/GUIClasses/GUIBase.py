@@ -34,8 +34,8 @@ class GUIBase(SuperClass):
         super().__init__(ClassName, ValidProperties, SignalProperties)
         self.Pos = Pos
         self.Size = Size
-        self.AbsolutePos = (0,0)
-        self.AbsoluteSize = (0,0)
+        self.AbsolutePos = (0, 0)
+        self.AbsoluteSize = (0, 0)
         self.BackgroundColor = Color
         self.zIndex = zIndex
         self.UIAspectRatio = UIAspectRatio
@@ -56,7 +56,7 @@ class GUIBase(SuperClass):
 
         xp, yp = xp * ScreenWidth - xs / 2, yp * ScreenHeight - ys / 2
 
-        self.AbsolutePos = (xp,yp)
+        self.AbsolutePos = (xp, yp)
         self.AbsoluteSize = (xs, ys)
 
         rectDetails = py.Rect(xp, yp, xs, ys)
@@ -74,7 +74,9 @@ def GetGuiAssets():
             sortedAssetDic[guiItem.zIndex] = []
         sortedAssetDic[guiItem.zIndex].append(guiItem)
 
-    for row in sortedAssetDic:
+    sortedAssetDic = dict(sorted(sortedAssetDic.items()))
+    for row in sortedAssetDic.values():
+        #print(row)
         for item in row:
             sortedAssetList.append(item)
 

@@ -1,4 +1,4 @@
-from ..SuperClass import SuperClass
+from Classes.SuperClass import SuperClass
 import pygame as py
 
 guiAssetList = []
@@ -73,7 +73,7 @@ def GetGuiAssets():
         if guiItem.zIndex not in sortedAssetDic:
             sortedAssetDic[guiItem.zIndex] = []
         sortedAssetDic[guiItem.zIndex].append(guiItem)
-
+    print(sortedAssetDic.items())
     sortedAssetDic = dict(sorted(sortedAssetDic.items()))
     for row in sortedAssetDic.values():
         #print(row)

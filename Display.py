@@ -3,6 +3,9 @@ import sys
 from Classes.GUIClasses.GUIBase import GetGuiAssets
 from Classes.GUIClasses.TextLabel import TextLabel
 from Classes.GUIClasses.Image import Image
+from Classes.GUIClasses.Button import Button, getButtonList
+from Classes.GUIClasses.Textbox import Textbox
+from Services.InputService import FireKeyPress, FireKeyRelease
 
 py.init()
 
@@ -11,14 +14,20 @@ BACKGROUND_COLOR = (100, 100, 100)
 
 screen = py.display.set_mode((200, 112.5), py.RESIZABLE)
 
-guiObject = TextLabel(
-    (0.5, 0.5), (0.25, 0.25), (255, 0, 255), (111, 111, 111), "SF Pro", 1, 2
-)
+# guiObject = TextLabel(
+#     (0.5, 0.5), (0.25, 0.25), (255, 0, 255), (111, 111, 111), "SF Pro", 1, 2
+# )
 
-guiObject.Text = "🥰"
-ImageLabel = Image(
-    (0.5, 0.5), (0.5, 0.5), (200, 200, 0), "Assets\MartianBackground.png"
-)
+# guiObject.Text = "$"
+# ImageLabel = Image(
+#     (0.5, 0.5), (0.5, 0.5), (200, 200, 0), "Assets\MartianBackground.png"
+# )
+
+# testB = Button((0.5, 0.5), (0.5, 0.5), (200, 200, 0))
+
+# testB.OnClick.Connect(lambda: print("clicked test working!"))
+TBTest = Textbox((0.5, 0.5), (0.5, 0.5), (200, 200, 0), (0, 0, 0), "SF Pro")
+
 
 running = True
 
@@ -30,10 +39,15 @@ while running:
             running = False
 
         if event.type == py.KEYDOWN:
-            print("Key pressed:", event.key)
+            FireKeyPress(event.key)
+            #print("Key pressed:", event.key)
+        if event.type == py.KEYUP:
+            FireKeyRelease(event.key)
+            #print("Key released:", event.key)
 
         if event.type == py.MOUSEBUTTONDOWN:
-            print("Mouse clicked:", event.pos)
+            for clickCB in getButtonList():
+                clickCB(screen, event.pos)
 
         if event.type == py.VIDEORESIZE:
             new_width = event.w

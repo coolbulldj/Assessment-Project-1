@@ -5,6 +5,7 @@ import time
 from Classes.GUIClasses.TextLabel import TextLabel
 from Classes.GUIClasses.Image import Image
 from Classes.GUIClasses.Textbox import Textbox
+from Classes.GUIClasses.ImageButton import ImageButton
 
 #Services / Modules
 from Services.InputService import FireKeyPress, FireKeyRelease
@@ -27,6 +28,12 @@ BackgroundImage = Image(
 Status = Image(
     (0.5, 0.5), (1, 1), (200, 200, 0, 0), "Assets\MetalTexture.jpg", zIndex=1
 )
+
+NextTermButton = ImageButton(
+    (0.5, 0.5), (0.25, 0.25), (200, 200, 0, 0), r"Assets\NextTermB.png", zIndex=1
+)
+
+
 
 #0.875
 

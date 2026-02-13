@@ -1,52 +1,26 @@
 import pygame as py
-import sys
 from Classes.GUIClasses.GUIBase import GetGuiAssets
-from Classes.GUIClasses.TextLabel import TextLabel
-from Classes.GUIClasses.Image import Image
-from Classes.GUIClasses.Button import Button, getButtonList
-from Classes.GUIClasses.Textbox import Textbox
-from Services.InputService import FireKeyPress, FireKeyRelease
+from Classes.GUIClasses.Button import getButtonList
 
 py.init()
 
 ASPECT_RATIO = 16/9
-BACKGROUND_COLOR = (100, 100, 100)
+BACKGROUND_COLOR = (0, 0, 255)
 
 screen = py.display.set_mode((200, 112.5), py.RESIZABLE)
 
-# guiObject = TextLabel(
-#     (0.5, 0.5), (0.25, 0.25), (255, 0, 255), (111, 111, 111), "SF Pro", 1, 2
-# )
-
-# guiObject.Text = "$"
-# ImageLabel = Image(
-#     (0.5, 0.5), (0.5, 0.5), (200, 200, 0), "Assets\MartianBackground.png"
-# )
-
-# testB = Button((0.5, 0.5), (0.5, 0.5), (200, 200, 0))
-
-# testB.OnClick.Connect(lambda: print("clicked test working!"))
-TBTest = Textbox((0.5, 0.5), (0.5, 0.5), (200, 200, 0), (0, 0, 0), "SF Pro")
-
-
 running = True
 
-while running:
+def TickDisplay(dt:int):
+    global screen
     for event in py.event.get():
-        if event.type == py.QUIT:
-            py.quit()
-            sys.exit()
-            running = False
-
-        if event.type == py.KEYDOWN:
-            FireKeyPress(event.key)
-            #print("Key pressed:", event.key)
-        if event.type == py.KEYUP:
-            FireKeyRelease(event.key)
-            #print("Key released:", event.key)
+        bList = getButtonList()
 
         if event.type == py.MOUSEBUTTONDOWN:
-            for clickCB in getButtonList():
+            for clickCB in bList["MouseDown"]:
+                clickCB(screen, event.pos)
+        elif event.type == py.MOUSEBUTTONUP:
+            for clickCB in bList["MouseUp"]:
                 clickCB(screen, event.pos)
 
         if event.type == py.VIDEORESIZE:
@@ -65,9 +39,10 @@ while running:
             )
 
     screen.fill((BACKGROUND_COLOR))
+
     UIAssets = GetGuiAssets()
     for guiObject in UIAssets:
         guiObject.refresh(screen)
     # rectDetails = py.Rect(0, 0, 100, 100xde)
     # py.draw.rect(screen, (0, 255, 0), rectDetails, 0)
-    py.display.flip()
+    py.display.update()

@@ -33,7 +33,8 @@ class TextLabel(GUIBase):
 
     def refresh(self, screen):
         super().refresh(screen)
-
+        if self.Text == "":
+            return
         ab_xs, ab_ys = self.AbsoluteSize
         pos_x, pos_y = self.AbsolutePos
 

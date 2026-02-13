@@ -18,14 +18,14 @@ class Button(GUIBase):
             zIndex,
             UIAspectRatio,
             "GuiButton",
-            ["OnMouseDown", "OnMouseUp", "MouseClickOff"],
+            ["MouseDown", "MouseUp", "MouseClickOff"],
             [],
         )
         self.MouseDown = Event()
         self.MouseUp = Event()
         self.MouseClickOff = Event()
-        buttonList["MouseUp"].append(self.MouseUp)
-        buttonList["MouseDown"].append(self.MouseDown)
+        buttonList["MouseUp"].append(self.FireMouseUp)
+        buttonList["MouseDown"].append(self.FireMouseDown)
 
 
     def FireMouseDown(self, screen, MousePos):

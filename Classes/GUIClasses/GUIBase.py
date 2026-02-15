@@ -4,12 +4,17 @@ import pygame as py
 guiAssetList = []
 
 
+def clamp(value, minVal, maxVal):
+    return max(minVal, min(value, maxVal))
+
+
 class GUIBase(SuperClass):
     def __init__(
         self,
         Pos,
         Size,
         Color,
+        BackgroundTransparency: int = 1,
         zIndex: int = 1,
         UIAspectRatio: float = None,
         ClassName: str = "GuiBase",
@@ -20,6 +25,7 @@ class GUIBase(SuperClass):
             "Pos",
             "Size",
             "BackgroundColor",
+            "BackgroundTransparency",
             "zIndex",
             "UIAspectRatio",
             "AbsolutePos",
@@ -37,6 +43,7 @@ class GUIBase(SuperClass):
         self.AbsolutePos = (0, 0)
         self.AbsoluteSize = (0, 0)
         self.BackgroundColor = Color
+        self.BackgroundTransparency = clamp(BackgroundTransparency, 0, 1)
         self.zIndex = zIndex
         self.UIAspectRatio = UIAspectRatio
         guiAssetList.append(self)
@@ -59,6 +66,10 @@ class GUIBase(SuperClass):
         self.AbsolutePos = (xp, yp)
         self.AbsoluteSize = (xs, ys)
 
+        if self.BackgroundTransparency == 1:
+            # No need to draw rectangle as the background transpareny is 1
+            return
+
         rectDetails = py.Rect(xp, yp, xs, ys)
 
         py.draw.rect(screen, self.BackgroundColor, rectDetails, 0)
@@ -73,10 +84,10 @@ def GetGuiAssets():
         if guiItem.zIndex not in sortedAssetDic:
             sortedAssetDic[guiItem.zIndex] = []
         sortedAssetDic[guiItem.zIndex].append(guiItem)
- 
+
     sortedAssetDic = dict(sorted(sortedAssetDic.items()))
     for row in sortedAssetDic.values():
-        #print(row)
+        # print(row)
         for item in row:
             sortedAssetList.append(item)
 

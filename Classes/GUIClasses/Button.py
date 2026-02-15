@@ -2,19 +2,24 @@ from .GUIBase import GUIBase
 from ..EventClass import Event
 from SpatialQueryLibrary import PointInsideRectange
 
-buttonList = {
-    "MouseUp" : [],
-    "MouseDown" : []
-}
+buttonList = {"MouseUp": [], "MouseDown": []}
+
 
 class Button(GUIBase):
     def __init__(
-        self, Pos, Size, BackgroundColor, zIndex=1, UIAspectRatio=None
+        self,
+        Pos,
+        Size,
+        BackgroundColor,
+        BackgroundTranspareny,
+        zIndex=1,
+        UIAspectRatio=None,
     ):
         super().__init__(
             Pos,
             Size,
             BackgroundColor,
+            BackgroundTranspareny,
             zIndex,
             UIAspectRatio,
             "GuiButton",
@@ -26,7 +31,6 @@ class Button(GUIBase):
         self.MouseClickOff = Event()
         buttonList["MouseUp"].append(self.FireMouseUp)
         buttonList["MouseDown"].append(self.FireMouseDown)
-
 
     def FireMouseDown(self, screen, MousePos):
         xs, ys = screen.get_size()
@@ -46,6 +50,6 @@ class Button(GUIBase):
         else:
             self.MouseClickOff._FireEvent()
 
-    
+
 def getButtonList():
     return buttonList

@@ -4,14 +4,15 @@ from Classes.GUIClasses.Button import getButtonList
 
 py.init()
 
-ASPECT_RATIO = 16/9
+ASPECT_RATIO = 16 / 9
 BACKGROUND_COLOR = (0, 0, 255)
 
-screen = py.display.set_mode((200, 112.5), py.RESIZABLE)
+screen = py.display.set_mode((800, 450), py.RESIZABLE)
 
 running = True
 
-def TickDisplay(dt:int):
+
+def TickDisplay(dt: int):
     global screen
     for event in py.event.get():
         bList = getButtonList()
@@ -24,6 +25,7 @@ def TickDisplay(dt:int):
                 clickCB(screen, event.pos)
 
         if event.type == py.VIDEORESIZE:
+            print("new widtH!")
             new_width = event.w
             new_height = int(new_width / ASPECT_RATIO)
 
@@ -33,10 +35,7 @@ def TickDisplay(dt:int):
                 new_height = event.h
                 new_width = int(new_height * ASPECT_RATIO)
 
-            screen = py.display.set_mode(
-                (new_width, new_height),
-                py.RESIZABLE
-            )
+            screen = py.display.set_mode((new_width, new_height), py.RESIZABLE)
 
     screen.fill((BACKGROUND_COLOR))
 

@@ -4,12 +4,20 @@ from .GUIBase import GUIBase
 
 class Image(GUIBase):
     def __init__(
-        self, Pos, Size, BackgroundColor, ImagePath, zIndex=1, UIAspectRatio=None
+        self,
+        Pos,
+        Size,
+        BackgroundColor,
+        BackgroundTranspareny,
+        ImagePath,
+        zIndex=1,
+        UIAspectRatio=None,
     ):
         super().__init__(
             Pos,
             Size,
             BackgroundColor,
+            BackgroundTranspareny,
             zIndex,
             UIAspectRatio,
             "ImageLabel",

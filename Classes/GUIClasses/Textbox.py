@@ -16,7 +16,7 @@ class Textbox(SuperClass):
         BackgroundColor,
         BackgroundTranspareny,
         TextColor,
-        TextFont,
+        TextFont=1,
         zIndex=1,
     ):
         super().__init__("Textbox", ["Textlabel", "Button", "TypingIn"], [])

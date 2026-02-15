@@ -20,6 +20,11 @@ class SuperClass:
             print(
                 f"WARNING: The Property:{name} is not a valid property of Class:{self.ClassName}"
             )
+
+        if name in self._Events.keys():
+            # print(self._Events, self.SignalProperties, name)
+            SignalEvent = self._Events[name]
+            SignalEvent._FireEvent(value)
         super().__setattr__(name, value)
 
     def GetPropertyChangedSignal(self, property: str):

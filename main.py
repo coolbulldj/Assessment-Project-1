@@ -157,8 +157,9 @@ def DisplayStateOfAffairs():
     OreInStorageLabel.Text = "Ore In Storage:"+str(oreInStorage)
     CurrentBalLabel.Text = "Current Balance:"+str(Money)
 
-    MinesPriceLabel.Text = "Mine Selling Price:"+str(MinePrice)
-    OrePriceLabel.Text = "Ore Selling Price:"+str(OrePrice)
+    MinesPriceLabel.Text = "Mine Selling Price:"+str(MinePrice)+"$"
+    OrePriceLabel.Text = "Ore Selling Price:"+str(OrePrice)+"$"
+    FoodPriceLabel.Text = "Food Price:"+str(FoodPrice)+"$"
     # print(f"Current year:{currentYear + 1}")
     # print(f"You have {[Population]} people in your colony")
     # print(f"You have {NumberOfMines} mines in your colony")
@@ -168,18 +169,47 @@ def DisplayStateOfAffairs():
     # print("Selling Prices;")
     # print(f"Each mining is currently selling/buying for {MinePrice}")
     # print(f"Each ton of ore is currently selling for {OrePrice}")
+def UpdateTransactionBalance():
+    pass
+
+def ProcessTranactions():
+    return False
 
 def GoToNextTerm():
+    if not ProcessTranactions():
+        return
+    
     global currentYear
     global OrePrice
     global MinePrice
-    ErrorLabel.Text = f"error{404+currentYear}"
+    global oreInStorage
     #Ensure all values
     currentYear += 1
     # Randomise Ore & Mine price
     OrePrice = random.randint(1, 12) + 7
     MinePrice = random.randint(1, 2000) + 2000
+
+    # Add ore produced
+    oreInStorage += OreProducion * NumberOfMines
+
     DisplayStateOfAffairs()
+
+    # Ways to lose (implement later)
+    # if currentSafication < 0.6:
+    #     print("Your people revolted")
+    #     break
+    # elif Population / NumberOfMines < 10:
+    #     print(
+    #         "Your've overworked your population you require ten people per each of your mines"
+    #     )
+    #     break
+    # elif Population < 30:
+    #     print("You don't have enough people left")
+    #     break
+
+    # if currentYear == yearsToSurive:
+    #     print(f"Your've surived your {yearsToSurive} terms in office")
+    #     break
 
 
 NextTermB.MouseUp.Connect(GoToNextTerm)

@@ -25,13 +25,31 @@ BackgroundImage = Image(
     (0.5, 0.375), (0.75, 0.75), (200, 200, 0, 0), "Assets\MartianBackground.png", zIndex=2
 )
 
-Status = Image(
-    (0.5, 0.5), (1, 1), (200, 200, 0, 0), "Assets\MetalTexture.jpg", zIndex=1
-)
+# Status = Image(
+#     (0.5, 0.5), (1, 1), (200, 200, 0, 0), "Assets\MetalTexture.jpg", zIndex=1
+# )
 
-NextTermButton = ImageButton(
-    (0.5, 0.5), (0.25, 0.25), (200, 200, 0, 0), r"Assets\NextTermB.png", zIndex=1
-)
+# NextTermButton = ImageButton(
+#     (0.5, 0.5), (0.25, 0.25), (200, 200, 0, 0), r"Assets\NextTermB.png", zIndex=1
+# )
+
+#Text labels
+currentTermLabel = TextLabel((0.5, 0.5), (0.1, 0.1), (0,0,0), (255,255,255))
+PopulationLabel = TextLabel((0.5, 0.5), (0.1, 0.1), (0,0,0), (255,255,255))
+MoneyLabel = TextLabel((0.5, 0.5), (0.1, 0.1), (0,0,0), (255,255,255))
+currentSatifactionLabel = TextLabel((0.5, 0.5), (0.1, 0.1), (0,0,0), (255,255,255))
+NumberOfMinesLabel = TextLabel((0.5, 0.5), (0.1, 0.1), (0,0,0), (255,255,255))
+
+OreProductionLabel = TextLabel((0.5, 0.5), (0.1, 0.1), (0,0,0), (255,255,255))
+OreInStorageLabel = TextLabel((0.5, 0.5), (0.1, 0.1), (0,0,0), (255,255,255))
+
+#Prcing
+FoodPriceLabel = TextLabel((0.5, 0.5), (0.1, 0.1), (0,0,0), (255,255,255))
+OrePriceLabel = TextLabel((0.5, 0.5), (0.1, 0.1), (0,0,0), (255,255,255))
+MinesPriceLabel = TextLabel((0, 0), (0.1, 0.1), (0,0,0), (255,255,255), "monospace", 1, 2)
+
+MinesPriceLabel.Text = "Mines: 100$"
+
 
 
 

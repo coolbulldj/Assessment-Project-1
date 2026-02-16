@@ -11,7 +11,7 @@ class TextLabel(GUIBase):
         TextColor,
         TextFont="monospace",
         TextSize: int = 1,
-        zIndex=None,
+        zIndex=1,
         UIAspectRatio=None,
         TextScaled: bool = True,
     ):

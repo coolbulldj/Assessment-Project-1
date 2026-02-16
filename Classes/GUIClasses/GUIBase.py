@@ -73,7 +73,7 @@ def GetGuiAssets():
         if guiItem.zIndex not in sortedAssetDic:
             sortedAssetDic[guiItem.zIndex] = []
         sortedAssetDic[guiItem.zIndex].append(guiItem)
-
+ 
     sortedAssetDic = dict(sorted(sortedAssetDic.items()))
     for row in sortedAssetDic.values():
         #print(row)

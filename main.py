@@ -2,10 +2,12 @@ import pygame as py
 import sys
 import time
 import random
+import math
 # Classes
 from Classes.GUIClasses.TextLabel import TextLabel
 from Classes.GUIClasses.Image import Image
 from Classes.GUIClasses.TextButton import TextButton
+from Classes.GUIClasses.Textbox import Textbox
 
 # Services / Modules
 from Services.InputService import FireKeyPress, FireKeyRelease
@@ -39,6 +41,8 @@ Money = (random.randint(1, 50) + 10) * Population
 FoodPrice = random.randint(1, 40) + 80
 OreProducion = random.randint(1, 40) + 80
 
+YEARS_TO_SURIVE = 10
+
 currentYear = 0
 oreInStorage = 0
 currentSafication = 1
@@ -46,17 +50,19 @@ currentSafication = 1
 OrePrice = 0
 MinePrice = 0
 
-def DisplayStateOfAffairs():
-    currentTermLabel.Text = "Current Term:"+str(currentYear+1)
-    PopulationLabel.Text = "Population:"+str(Population)
-    NumberOfMinesLabel.Text = "Mines owned:"+str(NumberOfMines)
-    OreProductionLabel.Text = "Each Mine Produces:"+str(OreProducion)+" tons of ore"
-    OreInStorageLabel.Text = "Ore In Storage:"+str(oreInStorage)
-    CurrentBalLabel.Text = "Current Balance:"+str(Money)
+running = True
 
-    MinesPriceLabel.Text = "Mine Selling Price:"+str(MinePrice)+"$"
-    OrePriceLabel.Text = "Ore Selling Price:"+str(OrePrice)+"$"
-    FoodPriceLabel.Text = "Food Price:"+str(FoodPrice)+"$"
+def DisplayStateOfAffairs():
+    UIService.currentTermLabel.Text = "Current Term:"+str(currentYear+1)
+    UIService.PopulationLabel.Text = "Population:"+str(Population)
+    UIService.NumberOfMinesLabel.Text = "Mines owned:"+str(NumberOfMines)
+    UIService.OreProductionLabel.Text = "Each Mine Produces:"+str(OreProducion)+" tons of ore"
+    UIService.OreInStorageLabel.Text = "Ore In Storage:"+str(oreInStorage)
+    UIService.CurrentBalLabel.Text = "Current Balance:"+str(Money)
+
+    UIService.MinesPriceLabel.Text = "Mine Selling Price:"+str(MinePrice)+"$"
+    UIService.OrePriceLabel.Text = "Ore Selling Price:"+str(OrePrice)+"$"
+    UIService.FoodPriceLabel.Text = "Food Price:"+str(FoodPrice)+"$"
     # print(f"Current year:{currentYear + 1}")
     # print(f"You have {[Population]} people in your colony")
     # print(f"You have {NumberOfMines} mines in your colony")
@@ -66,21 +72,131 @@ def DisplayStateOfAffairs():
     # print("Selling Prices;")
     # print(f"Each mining is currently selling/buying for {MinePrice}")
     # print(f"Each ton of ore is currently selling for {OrePrice}")
-def UpdateTransactionBalance():
-    pass
+def AttemptToGetInt(IntString):
+    a = -1
+    try:
+        a = int(IntString)
+    except Exception:
+        pass
+    return a
+
+
+
+def UpdateTransactionBalance(_):
+    #Prevents recursion from TB.TextLabel.Text = ""
+   # if str(UIService.)
+    RemainingBal = Money
+
+    def CheckItem(TB:Textbox, Price, Buying:bool, MaxItemsInTransaction):
+        if TB.Textlabel.Text == "": #The textlabel isn't real
+            return 0
+        nonlocal RemainingBal
+       
+        ItemsInTransaction = AttemptToGetInt(TB.Textlabel.Text)
+        ItemCost = ItemsInTransaction * Price
+        # print(((ItemCost) > RemainingBal), Buying)
+        # print(((ItemCost) > RemainingBal) == Buying)
+        if ItemsInTransaction < 0:
+            #Error occurred
+            TB.Textlabel.Text = ""
+            return 0
+        elif ItemsInTransaction > MaxItemsInTransaction:
+            ItemsInTransaction = MaxItemsInTransaction
+            ItemCost = ItemsInTransaction * Price
+            TB.Textlabel.Text = f"{MaxItemsInTransaction}"
+            #DEBUGGING
+            # print(f"<<<{TB.Name}>>>")
+            # print(ItemsInTransaction, "Items in transactions")
+            # print(ItemCost, "max", MaxItemsInTransaction)
+            # print("<<<END>>>")
+
+
+        if Buying:
+            RemainingBal -= ItemCost
+        else:
+            RemainingBal += ItemCost
+
+        return ItemsInTransaction
+
+    global NumberOfMines
+    global oreInStorage
+    global currentSafication
+
+    # NumberOfMines -= CheckItem(UIService.SellMinesTB, MinePrice, False, NumberOfMines)
+    # oreInStorage -= CheckItem(UIService.SellOreTB, OrePrice, False, oreInStorage)
+    # NumberOfMines += CheckItem(UIService.BuyMinesTB, MinePrice, True, math.floor(RemainingBal / MinePrice))
+    # currentSafication += CheckItem(UIService.SellMinesTB, FoodPrice, True, math.floor(RemainingBal / FoodPrice)) / Population - 1
+    CheckItem(UIService.SellMinesTB, MinePrice, False, NumberOfMines)
+    CheckItem(UIService.SellOreTB, OrePrice, False, oreInStorage)
+    CheckItem(UIService.BuyMinesTB, MinePrice, True, math.floor(RemainingBal / MinePrice))
+    CheckItem(UIService.BuyFoodTB, FoodPrice, True, math.floor(RemainingBal / FoodPrice))
+
+    UIService.RemainingBalLabel.Text = f"Remaining Balance:{RemainingBal}"
+
+UIService.SellMinesTB.Textlabel.GetPropertyChangedSignal("Text").Connect(UpdateTransactionBalance)
+UIService.SellOreTB.Textlabel.GetPropertyChangedSignal("Text").Connect(UpdateTransactionBalance)
+UIService.BuyMinesTB.Textlabel.GetPropertyChangedSignal("Text").Connect(UpdateTransactionBalance)
+UIService.BuyFoodTB.Textlabel.GetPropertyChangedSignal("Text").Connect(UpdateTransactionBalance)
 
 def ProcessTranactions():
-    return False
+    global Money
+    RemainingBal = Money
 
-def GoToNextTerm():
-    print("Next Term")
-    if not ProcessTranactions():
+    def CheckItem(TB:Textbox, Price, Buying:bool, MaxItemsInTransaction):
+        if TB.Textlabel.Text == "": #The textlabel isn't real
+            return 0
+        nonlocal RemainingBal
+       
+        ItemsInTransaction = AttemptToGetInt(TB.Textlabel.Text)
+        ItemCost = ItemsInTransaction * Price
+        # print(((ItemCost) > RemainingBal), Buying)
+        # print(((ItemCost) > RemainingBal) == Buying)
+        if ItemsInTransaction < 0:
+            #Error occurred
+            TB.Textlabel.Text = ""
+            return 0
+        elif ItemsInTransaction > MaxItemsInTransaction:
+            ItemsInTransaction = MaxItemsInTransaction
+            ItemCost = ItemsInTransaction * Price
+            TB.Textlabel.Text = f"{MaxItemsInTransaction}"
+            #DEBUGGING
+            # print(f"<<<{TB.Name}>>>")
+            # print(ItemsInTransaction, "Items in transactions")
+            # print(ItemCost, "max", MaxItemsInTransaction)
+            # print("<<<END>>>")
+
+
+        if Buying:
+            RemainingBal -= ItemCost
+        else:
+            RemainingBal += ItemCost
+
+        return ItemsInTransaction
+
+    global NumberOfMines
+    global oreInStorage
+    global currentSafication
+
+    NumberOfMines -= CheckItem(UIService.SellMinesTB, MinePrice, False, NumberOfMines)
+    oreInStorage -= CheckItem(UIService.SellOreTB, OrePrice, False, oreInStorage)
+    NumberOfMines += CheckItem(UIService.BuyMinesTB, MinePrice, True, math.floor(RemainingBal / MinePrice))
+    currentSafication += CheckItem(UIService.SellMinesTB, FoodPrice, True, math.floor(RemainingBal / FoodPrice)) / Population - 1
+
+    Money = RemainingBal
+
+    return True
+
+def GoToNextTerm(StartingGame:bool=None):
+    if not StartingGame and not ProcessTranactions():
         return
-    
+
     global currentYear
     global OrePrice
     global MinePrice
     global oreInStorage
+    global OreProducion
+    global running
+
     #Ensure all values
     currentYear += 1
     # Randomise Ore & Mine price
@@ -92,25 +208,31 @@ def GoToNextTerm():
 
     DisplayStateOfAffairs()
 
-    # Ways to lose (implement later)
-    # if currentSafication < 0.6:
-    #     print("Your people revolted")
-    #     break
-    # elif Population / NumberOfMines < 10:
-    #     print(
-    #         "Your've overworked your population you require ten people per each of your mines"
-    #     )
-    #     break
-    # elif Population < 30:
-    #     print("You don't have enough people left")
-    #     break
+    #Reset Textbox Values
+    
 
-    # if currentYear == yearsToSurive:
-    #     print(f"Your've surived your {yearsToSurive} terms in office")
-    #     break
+    if currentSafication > 1.1:
+        OreProducion += random.randint(1, 20) + 1
+    elif currentSafication < 0.9:
+        OreProducion -= random.randint(1, 20) + 1
+
+    # Ways to lose (implement later)
+    if currentSafication < 0.6:
+        print("Your people revolted")
+    elif Population / NumberOfMines < 10:
+        print(
+            "Your've overworked your population you require ten people per each of your mines"
+        )
+    elif Population < 30:
+        print("You don't have enough people left")
+
+    if currentYear == YEARS_TO_SURIVE:
+        print(f"Your've surived your {YEARS_TO_SURIVE} terms in office")
+        running = False
 
 
 UIService.NextTermB.MouseUp.Connect(GoToNextTerm)
+GoToNextTerm(True)
 
 
 # 0.875
@@ -119,8 +241,6 @@ StartTime = time.time()
 LastFrameTime = time.time()
 
 ElapedTime = 0
-
-running = True
 
 while running:
     for event in py.event.get():

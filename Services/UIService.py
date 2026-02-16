@@ -105,13 +105,13 @@ RemainingBalLabel = TextLabel(
 
 ErrorLabel = TextLabel((0.5, 0.7), (0.1, 0.1), (0,0,0), 0, (255, 0, 0), "monospace")
 
-BuyMinesLabel = TextLabel(
+SellMinesLabel = TextLabel(
         (0.65, 0.3), (0.1, 0.1), (0, 0, 0), 1, REGULAR_TEXT_COLOR, "monospace", 1, 2
     )
-SellMinesLabel = TextLabel(
+SellOreLabel = TextLabel(
         (0.65, 0.35), (0.1, 0.1), (0, 0, 0), 1, REGULAR_TEXT_COLOR, "monospace", 1, 2
     )
-SellOreLabel = TextLabel(
+BuyMinesLabel = TextLabel(
         (0.65, 0.4), (0.1, 0.1), (0, 0, 0), 1, REGULAR_TEXT_COLOR, "monospace", 1, 2
     )
 BuyFoodLabel = TextLabel(
@@ -125,10 +125,15 @@ BuyFoodLabel.Text = "Buy Food:"
 
 TB_STANDARD_SIZE = (0.04, 0.03)
 
-SellOreTB = Textbox((0.72, 0.3), TB_STANDARD_SIZE, (255, 255, 0), 0, (0,0,0), "monospace")
-SellMinesTB = Textbox((0.72, 0.35), TB_STANDARD_SIZE, (255, 255, 0), 0, (0,0,0), "monospace")
+SellMinesTB = Textbox((0.72, 0.3), TB_STANDARD_SIZE, (255, 255, 0), 0, (0,0,0), "monospace")
+SellOreTB = Textbox((0.72, 0.35), TB_STANDARD_SIZE, (255, 255, 0), 0, (0,0,0), "monospace")
 BuyMinesTB = Textbox((0.72, 0.4), TB_STANDARD_SIZE, (255, 255, 0), 0, (0,0,0), "monospace")
 BuyFoodTB = Textbox((0.72, 0.45), TB_STANDARD_SIZE, (255, 255, 0), 0, (0,0,0), "monospace")
+
+SellMinesTB.Name = "SellMinesTB"
+SellOreTB.Name = "SellOreTB"
+BuyMinesTB.Name = "BuyMinesTB"
+BuyFoodTB.Name = "BuyFoodTB"
 
 NextTermB = TextButton((0.5, 0.57), (0.15, 0.05), (50, 50, 50), 0, (0, 0, 0))
 NextTermB.Text = "Next Term!"

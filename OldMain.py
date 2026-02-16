@@ -30,6 +30,8 @@ def DisplayStateOfAffairs():
     print(f"Each mining is currently selling/buying for {MinePrice}")
     print(f"Each ton of ore is currently selling for {OrePrice}")
 
+    
+
 
 def GetInt(DisplayString):
     a = input(DisplayString)

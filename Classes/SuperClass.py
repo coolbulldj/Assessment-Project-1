@@ -4,6 +4,7 @@ from .EventClass import Event
 class SuperClass:
     def __init__(self, ClassName, ValidProperties, SignalProperties):
         self.ClassName = ClassName
+        self.Name = ClassName
         self._Events = {}  # The Events from Get Property Changed Signal { [propertyName] = EventObject }
         self.ValidProperties = ValidProperties
         self.SignalProperties = SignalProperties
@@ -21,11 +22,12 @@ class SuperClass:
                 f"WARNING: The Property:{name} is not a valid property of Class:{self.ClassName}"
             )
 
+        super().__setattr__(name, value)
+
         if name in self._Events.keys():
             # print(self._Events, self.SignalProperties, name)
             SignalEvent = self._Events[name]
             SignalEvent._FireEvent(value)
-        super().__setattr__(name, value)
 
     def GetPropertyChangedSignal(self, property: str):
         if property not in self.SignalProperties:

@@ -25,13 +25,13 @@ class TextLabel(GUIBase):
             UIAspectRatio,
             "TextLabel",
             ["TextScaled", "Text", "TextColor", "TextSize", "TextFont"],
-            [],
+            ["Text"],
         )
         self.TextScaled = TextScaled
         self.TextColor = TextColor
         self.TextSize = TextSize
         self.TextFont = TextFont
-        self.Text = "hello world"
+        self.Text = ""
 
     def refresh(self, screen):
         super().refresh(screen)

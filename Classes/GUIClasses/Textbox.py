@@ -30,12 +30,14 @@ class Textbox(SuperClass):
             1,
             zIndex + 1,
         )
-        self.Button = Button(Pos, Size, BackgroundColor, zIndex)
+        B = Button(Pos, Size, BackgroundColor, zIndex)
         self.TypingIn = False
 
-        self.Button.MouseClickOff.Connect(self.stop_typing)
-        self.Button.MouseUp.Connect(self.start_typing)
+        B.MouseClickOff.Connect(self.stop_typing)
+        B.MouseUp.Connect(self.start_typing)
         InputPress.Connect(self.typing)
+
+        self.Button = B
 
     def typing(self, keycode):
 

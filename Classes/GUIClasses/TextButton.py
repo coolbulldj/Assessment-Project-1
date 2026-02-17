@@ -18,7 +18,7 @@ class TextButton(SuperClass):
         TextScaled=True,
     ):
         super().__init__(
-            "Textbox", ["TextLabel", "Button", "TypingIn", "Text"], ["Text"]
+            "TextButton", ["TextLabel", "Button", "TypingIn", "Text", "MouseDown", "MouseUp", "MouseClickOff"], ["Text"]
         )
         self.TextLabel = TextLabel(
             Pos,

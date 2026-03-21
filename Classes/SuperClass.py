@@ -1,4 +1,5 @@
 from .EventClass import Event
+# import traceback
 
 
 class SuperClass:
@@ -6,11 +7,16 @@ class SuperClass:
         self.ClassName = ClassName
         self.Name = ClassName
         self._Events = {}  # The Events from Get Property Changed Signal { [propertyName] = EventObject }
-        self.ValidProperties = ValidProperties #array
-        self.SignalProperties = SignalProperties #array
+        self.ValidProperties = ValidProperties  # array
+        self.SignalProperties = SignalProperties  # array
         self._initialized = True
 
     def __setattr__(self, name, value):
+        # if name == "Text":
+        #         # print(" ")
+        #         # print("new text",value)
+        #         # traceback.print_stack()
+        #         # print(" ")
         initialized = hasattr(self, "_initialized")
 
         if not initialized:

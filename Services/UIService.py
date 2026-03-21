@@ -25,13 +25,6 @@ GlassFrame = Image(
     zIndex=0,
 )
 
-Status = Image(
-    (0.5, 0.5), (1, 1), (200, 200, 0, 0), "Assets\MetalTexture.jpg", zIndex=1
-)
-
-NextTermButton = ImageButton(
-    (0.5, 0.5), (0.25, 0.25), (200, 200, 0, 0), r"Assets\NextTermB.png", zIndex=1
-)
 HEADERTEXTCOLOR = (0, 0, 0)
 
 REGULAR_TEXT_COLOR = (50, 50, 50)
@@ -60,18 +53,20 @@ DecisionsLabel.Text = "Decisions"
 currentTermLabel = TextLabel(
     (0.33, 0.25), (0.15, 0.05), (0, 0, 0), 1, REGULAR_TEXT_COLOR
 )
-PopulationLabel = TextLabel((0.33, 0.3), (0.15, 0.1), (0, 0, 0), 1, REGULAR_TEXT_COLOR)
-currentSatifactionLabel = TextLabel(
-    (0.33, 0.5), (0.15, 0.05), (0, 0, 0), 1, REGULAR_TEXT_COLOR
+PopulationLabel = TextLabel(
+    (0.33, 0.31), (0.15, 0.05), (0, 0, 0), 1, REGULAR_TEXT_COLOR
 )
 NumberOfMinesLabel = TextLabel(
-    (0.33, 0.35), (0.15, 0.05), (0, 0, 0), 1, REGULAR_TEXT_COLOR
+    (0.33, 0.37), (0.15, 0.05), (0, 0, 0), 1, REGULAR_TEXT_COLOR
 )
 OreProductionLabel = TextLabel(
-    (0.33, 0.4), (0.15, 0.05), (0, 0, 0), 1, REGULAR_TEXT_COLOR
+    (0.33, 0.43), (0.15, 0.05), (0, 0, 0), 1, REGULAR_TEXT_COLOR
 )
 OreInStorageLabel = TextLabel(
-    (0.33, 0.45), (0.15, 0.05), (0, 0, 0), 1, REGULAR_TEXT_COLOR
+    (0.33, 0.49), (0.15, 0.05), (0, 0, 0), 1, REGULAR_TEXT_COLOR
+)
+currentSatifactionLabel = TextLabel(
+    (0.33, 0.55), (0.15, 0.05), (0, 0, 0), 1, REGULAR_TEXT_COLOR
 )
 
 currentTermLabel.Text = "Current Term: 10"
@@ -81,8 +76,10 @@ NumberOfMinesLabel.Text = "Mines Owned:100"
 OreProductionLabel.Text = "Ore Production Rate:34"
 OreInStorageLabel.Text = "Ore In Storage:8789(tons)"
 
-#Pricing
-FoodPriceLabel = TextLabel((0.485, 0.35), (0.15, 0.05), (0, 0, 0), 1, REGULAR_TEXT_COLOR)
+# Pricing
+FoodPriceLabel = TextLabel(
+    (0.485, 0.35), (0.15, 0.05), (0, 0, 0), 1, REGULAR_TEXT_COLOR
+)
 OrePriceLabel = TextLabel((0.485, 0.4), (0.15, 0.05), (0, 0, 0), 1, REGULAR_TEXT_COLOR)
 MinesPriceLabel = TextLabel(
     (0.485, 0.45), (0.15, 0.05), (0, 0, 0), 1, REGULAR_TEXT_COLOR, "monospace", 1, 2
@@ -93,12 +90,12 @@ OrePriceLabel.Text = "Ore Price:50$"
 MinesPriceLabel.Text = "Mine Price:250$"
 
 
-#Purchasing Labels
+# Purchasing Labels
 CurrentBalLabel = TextLabel(
-    (0.65, 0.25), (0.2, 0.05), (0, 0, 0), 1, REGULAR_TEXT_COLOR, "monospace", 1, 2
+    (0.65, 0.26), (0.2, 0.05), (0, 0, 0), 1, REGULAR_TEXT_COLOR, "monospace", 1, 2
 )
 RemainingBalLabel = TextLabel(
-    (0.65, 0.5), (0.2, 0.05), (0, 0, 0), 1, REGULAR_TEXT_COLOR, "monospace", 1, 2
+    (0.67, 0.56), (0.15, 0.05), (0, 0, 0), 1, REGULAR_TEXT_COLOR, "monospace", 1, 2
 )
 # CurrentBalLabel.Text = "Current Balance: 1000$"
 # RemainingBalLabel.Text = "Remaining Balance: 0$"
@@ -106,16 +103,16 @@ RemainingBalLabel = TextLabel(
 ErrorLabel = TextLabel((0.5, 0.7), (0.4, 0.05), (0, 0, 0), 0, (255, 0, 0), "monospace")
 
 SellMinesLabel = TextLabel(
-    (0.65, 0.3), (0.1, 0.05), (0, 0, 0), 1, REGULAR_TEXT_COLOR, "monospace", 1, 2
+    (0.65, 0.32), (0.1, 0.05), (0, 0, 0), 1, REGULAR_TEXT_COLOR, "monospace", 1, 2
 )
 SellOreLabel = TextLabel(
-    (0.65, 0.35), (0.1, 0.05), (0, 0, 0), 1, REGULAR_TEXT_COLOR, "monospace", 1, 2
+    (0.65, 0.38), (0.1, 0.05), (0, 0, 0), 1, REGULAR_TEXT_COLOR, "monospace", 1, 2
 )
 BuyMinesLabel = TextLabel(
-    (0.65, 0.4), (0.1, 0.05), (0, 0, 0), 1, REGULAR_TEXT_COLOR, "monospace", 1, 2
+    (0.65, 0.44), (0.1, 0.05), (0, 0, 0), 1, REGULAR_TEXT_COLOR, "monospace", 1, 2
 )
 BuyFoodLabel = TextLabel(
-    (0.65, 0.45), (0.1, 0.05), (0, 0, 0), 1, REGULAR_TEXT_COLOR, "monospace", 1, 2
+    (0.65, 0.5), (0.1, 0.05), (0, 0, 0), 1, REGULAR_TEXT_COLOR, "monospace", 1, 2
 )
 
 SellOreLabel.Text = "Sell Ore:"
@@ -123,19 +120,41 @@ SellMinesLabel.Text = "Sell Mines:"
 BuyMinesLabel.Text = "Buy Mines:"
 BuyFoodLabel.Text = "Buy Food:"
 
-TB_STANDARD_SIZE = (0.04, 0.03)
+TB_STANDARD_SIZE = (0.05, 0.03)
+TB_STANDARD_HOR_ALIGNMENT = 0.729
+TB_STANDARD_COLOR = (200, 200, 200)
 
 SellMinesTB = Textbox(
-    (0.72, 0.3), TB_STANDARD_SIZE, (255, 255, 0), 0, (0, 0, 0), "monospace"
+    (TB_STANDARD_HOR_ALIGNMENT, 0.32),
+    TB_STANDARD_SIZE,
+    TB_STANDARD_COLOR,
+    0,
+    (0, 0, 0),
+    "monospace",
 )
 SellOreTB = Textbox(
-    (0.72, 0.35), TB_STANDARD_SIZE, (255, 255, 0), 0, (0, 0, 0), "monospace"
+    (TB_STANDARD_HOR_ALIGNMENT, 0.38),
+    TB_STANDARD_SIZE,
+    TB_STANDARD_COLOR,
+    0,
+    (0, 0, 0),
+    "monospace",
 )
 BuyMinesTB = Textbox(
-    (0.72, 0.4), TB_STANDARD_SIZE, (255, 255, 0), 0, (0, 0, 0), "monospace"
+    (TB_STANDARD_HOR_ALIGNMENT, 0.44),
+    TB_STANDARD_SIZE,
+    TB_STANDARD_COLOR,
+    0,
+    (0, 0, 0),
+    "monospace",
 )
 BuyFoodTB = Textbox(
-    (0.72, 0.45), TB_STANDARD_SIZE, (255, 255, 0), 0, (0, 0, 0), "monospace"
+    (TB_STANDARD_HOR_ALIGNMENT, 0.5),
+    TB_STANDARD_SIZE,
+    TB_STANDARD_COLOR,
+    0,
+    (0, 0, 0),
+    "monospace",
 )
 
 
@@ -146,3 +165,14 @@ BuyFoodTB.Name = "BuyFoodTB"
 
 NextTermB = TextButton((0.5, 0.57), (0.15, 0.05), (50, 50, 50), 0, (0, 0, 0))
 NextTermB.Text = "Next Term!"
+
+
+# Menu Options
+QuitB = TextButton((0.3, 0.9), (0.15, 0.05), (255, 255, 255), 0, (0, 0, 0))
+QuitB.Text = "Quit"
+
+NewGameB = TextButton((0.5, 0.9), (0.15, 0.05), (255, 255, 255), 0, (0, 0, 0))
+NewGameB.Text = "New Game"
+
+ContinueB = TextButton((0.7, 0.9), (0.15, 0.05), (255, 255, 255), 0, (0, 0, 0))
+ContinueB.Text = "Continue"

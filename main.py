@@ -9,8 +9,9 @@ import math
 from Services.InputService import FireKeyPress, FireKeyRelease
 import Display
 from Classes.GUIClasses.Button import getButtonList
+from Classes.GUIClasses.Textbox import Textbox
 import Services.UIService as UIService
-
+import Services.DataService as DataService
 
 UIService.SOALabel.Text = "State Of Affairs"
 UIService.MarketsLabel.Text = "Markets"
@@ -138,6 +139,26 @@ def UpdateTransactionBalance(_):
     UIService.RemainingBalLabel.Text = f"Remaining Balance:{RemainingBal}"
 
 
+def SaveData():
+    DataService.writeData(
+        {
+            "NumberOfMines": NumberOfMines,
+            "Population": Population,
+            "Money": Money,
+            "FoodPrice": FoodPrice,
+            "OreProducion": OreProducion,
+            "currentYear": currentYear,
+            "oreInStorage": oreInStorage,
+            "currentSafication": currentSafication,
+            "OrePrice": OrePrice,
+            "MinePrice": MinePrice,
+        }
+    )
+
+def LoadData():
+    data = DataService.readData()
+
+
 UIService.SellMinesTB.Textlabel.GetPropertyChangedSignal("Text").Connect(
     UpdateTransactionBalance
 )
@@ -208,6 +229,14 @@ def ProcessTranactions():
     return True
 
 
+def DisplayLossOptions():
+    pass
+
+
+def DisplayMenuOptions():
+    pass
+
+
 def GoToNextTerm(StartingGame: bool = None):
     if not StartingGame and not ProcessTranactions():
         return
@@ -238,22 +267,17 @@ def GoToNextTerm(StartingGame: bool = None):
         OreProducion -= random.randint(1, 20) + 1
 
     # Ways to lose (implement later)
-    return
     if currentSafication < 0.6:
         UIService.ErrorLabel.Text = "Your people revolted!"
-        running = False
     elif Population / NumberOfMines < 10:
         UIService.ErrorLabel.Text = "Your've overworked your population you require ten people per each of your mines"
-        running = False
     elif Population < 30:
         UIService.ErrorLabel.Text = "You don't have enough people left"
-        running = False
 
     if currentYear == YEARS_TO_SURIVE:
         UIService.ErrorLabel.Text = (
             f"Your've surived your {YEARS_TO_SURIVE} terms in office"
         )
-        running = False
 
 
 UIService.NextTermB.MouseUp.Connect(GoToNextTerm)
@@ -271,7 +295,7 @@ FPS_CAP = 60
 
 
 while running:
-    #print("running")
+    # print("running")
     for event in py.event.get():
         if event.type == py.QUIT:
             print("Quiting!")
@@ -312,9 +336,5 @@ while running:
     Display.TickDisplay(dt)
 
     LastFrameTime = currentTime
-    
-    time.sleep(max(1 / FPS_CAP - dt, 0))
-print("start of world")
 
-#time.sleep(3)
-print("end of world")
+    time.sleep(max(1 / FPS_CAP - dt, 0))

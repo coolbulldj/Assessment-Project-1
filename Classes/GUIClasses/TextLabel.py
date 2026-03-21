@@ -2,7 +2,8 @@ from pygame import freetype as ft
 from .GUIBase import GUIBase
 
 fontCache = {}
-seperator = " " #allows for array of text lines to be combined
+seperator = " "  # allows for array of text lines to be combined
+
 
 def GetFont(Name):
     if Name not in fontCache.keys():
@@ -11,7 +12,7 @@ def GetFont(Name):
 
 
 def GetScaledTextSize(text: str, font: ft.SysFont, abSize):
-    if not text or text == '':
+    if not text or text == "":
         raise ValueError("text can't be none or ''")
 
     ab_xs, ab_ys = abSize
@@ -38,7 +39,9 @@ def GetScaledTextSize(text: str, font: ft.SysFont, abSize):
     return new_size
 
 
-def DetermineWrap(text: str, font: ft.SysFont, absoluteSize: tuple): #returns a list of lines
+def DetermineWrap(
+    text: str, font: ft.SysFont, absoluteSize: tuple
+):  # returns a list of lines
     if not text:
         return []
 
@@ -111,7 +114,7 @@ class TextLabel(GUIBase):
             Pos,
             Size,
             BackgroundColor,
-            0,
+            BackgroundTransparency,  # BackgroundTransparency
             zIndex,
             UIAspectRatio,
             "TextLabel",
@@ -145,14 +148,20 @@ class TextLabel(GUIBase):
 
         if self.TextScaled:
             # First try to wrap the text into lines that fit
-            wrapLines = DetermineWrap(self.Text, font, self.AbsoluteSize) if self.TextWrapped else [self.Text]
+            wrapLines = (
+                DetermineWrap(self.Text, font, self.AbsoluteSize)
+                if self.TextWrapped
+                else [self.Text]
+            )
 
             # Compute a font size that fits vertically for the number of lines
             rows = max(1, len(wrapLines))
             per_row_height = ab_ys / rows
             # Determine a font size that fits the widest line horizontally and the per-row height vertically
             # Start with a candidate size that fits vertically
-            candidate_size = GetScaledTextSize(self.Text, font, (ab_xs, per_row_height * rows))
+            candidate_size = GetScaledTextSize(
+                self.Text, font, (ab_xs, per_row_height * rows)
+            )
             # But better to compute per-line sizes and pick the minimum
             per_line_sizes = []
             for line in wrapLines:

@@ -1,0 +1,10 @@
+NumberOfMines ;:; 8
+Population ;:; 68
+Money ;:; 1836
+FoodPrice ;:; 110
+OreProducion ;:; 96
+currentYear ;:; 1
+oreInStorage ;:; 768
+currentSafication ;:; 1
+OrePrice ;:; 12
+MinePrice ;:; 2255

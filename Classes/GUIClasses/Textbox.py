@@ -51,13 +51,14 @@ class Textbox(SuperClass):
         if keycode == 8:
             self.Textlabel.Text = self.Textlabel.Text[:-1]
             return
-
-        self.Textlabel.Text += chr(keycode)
+        SetText = self.Textlabel.Text + chr(keycode)
+        self.Textlabel.Text = SetText
 
     def stop_typing(self):
         self.TypingIn = False
 
     def start_typing(self):
+        print("start_typing")
         self.Textlabel.Text = ""
         self.TypingIn = True
 

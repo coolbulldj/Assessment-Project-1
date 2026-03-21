@@ -40,7 +40,6 @@ class Textbox(SuperClass):
         self.Button = B
 
     def typing(self, keycode):
-
         if not is_valid_chr(keycode):
             # keycode is not able to be translated to a string therefore remove it
 

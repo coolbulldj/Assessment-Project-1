@@ -7,7 +7,11 @@ class ImageButton(SuperClass):
     def __init__(
         self, Pos, Size, BackgroundColor, BackgroundTranspareny, ImagePath, zIndex=1
     ):
-        super().__init__("ImageButton", ["Image", "Button", "TypingIn", "MouseDown", "MouseUp", "MouseClickOff"], [])
+        super().__init__(
+            "ImageButton",
+            ["Image", "Button", "TypingIn", "MouseDown", "MouseUp", "MouseClickOff"],
+            [],
+        )
         self.Image = Image(
             Pos, Size, BackgroundColor, BackgroundTranspareny, ImagePath, zIndex + 1
         )

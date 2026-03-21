@@ -6,8 +6,8 @@ class SuperClass:
         self.ClassName = ClassName
         self.Name = ClassName
         self._Events = {}  # The Events from Get Property Changed Signal { [propertyName] = EventObject }
-        self.ValidProperties = ValidProperties
-        self.SignalProperties = SignalProperties
+        self.ValidProperties = ValidProperties #array
+        self.SignalProperties = SignalProperties #array
         self._initialized = True
 
     def __setattr__(self, name, value):

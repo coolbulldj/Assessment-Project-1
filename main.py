@@ -242,7 +242,6 @@ def ProcessTranactions():
 def DisplayMenuOptions():
     # Background stays visible
     UIService.BackgroundImage.Visible = True
-    print(UIService.BackgroundImage.ImagePath)
     #print(UIService.BackgroundImage.Visible)
     UIService.QuitB.Visible = True
     UIService.NewGameB.Visible = True
@@ -341,55 +340,58 @@ GoToNextTerm(True)
 
 # 0.875
 
-StartTime = time.time()
-LastFrameTime = time.time()
 
-ElapedTime = 0
+def main():
+    LastFrameTime = time.time()
 
-FPS_CAP = 60
+    ElapedTime = 0
+
+    FPS_CAP = 60
+
+    global running, screen
+    while running:
+        # print("running")
+        for event in py.event.get():
+            if event.type == py.QUIT:
+                py.quit()
+                sys.exit()
+                running = False
+
+            if event.type == py.KEYDOWN:
+                FireKeyPress(event.key)
+                # print("Key pressed:", event.key)
+            if event.type == py.KEYUP:
+                FireKeyRelease(event.key)
+                # print("Key released:", event.key)
+            bList = getButtonList()
+
+            if event.type == py.MOUSEBUTTONDOWN:
+                for clickCB in bList["MouseDown"]:
+                    clickCB(Display.screen, event.pos)
+            elif event.type == py.MOUSEBUTTONUP:
+                for clickCB in bList["MouseUp"]:
+                    clickCB(Display.screen, event.pos)
+
+            if event.type == py.VIDEORESIZE:
+                new_width = event.w
+                new_height = int(new_width / Display.ASPECT_RATIO)
+
+                # If height is too large for what user dragged,
+                # base it on height instead
+                if new_height > event.h:
+                    new_height = event.h
+                    new_width = int(new_height * Display.ASPECT_RATIO)
+
+                screen = py.display.set_mode((new_width, new_height), py.RESIZABLE)
 
 
-while running:
-    # print("running")
-    for event in py.event.get():
-        if event.type == py.QUIT:
-            print("Quiting!")
-            py.quit()
-            sys.exit()
-            running = False
+        currentTime = time.time()
+        dt = currentTime - LastFrameTime
+        ElapedTime += dt
+        Display.TickDisplay()
 
-        if event.type == py.KEYDOWN:
-            FireKeyPress(event.key)
-            # print("Key pressed:", event.key)
-        if event.type == py.KEYUP:
-            FireKeyRelease(event.key)
-            # print("Key released:", event.key)
-        bList = getButtonList()
+        LastFrameTime = currentTime
 
-        if event.type == py.MOUSEBUTTONDOWN:
-            for clickCB in bList["MouseDown"]:
-                clickCB(Display.screen, event.pos)
-        elif event.type == py.MOUSEBUTTONUP:
-            for clickCB in bList["MouseUp"]:
-                clickCB(Display.screen, event.pos)
+        time.sleep(max(1 / FPS_CAP - dt, 0))
 
-        if event.type == py.VIDEORESIZE:
-            new_width = event.w
-            new_height = int(new_width / Display.ASPECT_RATIO)
-
-            # If height is too large for what user dragged,
-            # base it on height instead
-            if new_height > event.h:
-                new_height = event.h
-                new_width = int(new_height * Display.ASPECT_RATIO)
-
-            screen = py.display.set_mode((new_width, new_height), py.RESIZABLE)
-
-    currentTime = time.time()
-    dt = currentTime - LastFrameTime
-    ElapedTime += dt
-    Display.TickDisplay(dt)
-
-    LastFrameTime = currentTime
-
-    time.sleep(max(1 / FPS_CAP - dt, 0))
+main()

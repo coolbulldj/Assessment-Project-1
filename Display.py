@@ -11,7 +11,7 @@ screen = py.display.set_mode((800, 450), py.RESIZABLE)
 running = True
 
 
-def TickDisplay(dt: int):
+def TickDisplay():
     global screen
     screen.fill((BACKGROUND_COLOR))
 

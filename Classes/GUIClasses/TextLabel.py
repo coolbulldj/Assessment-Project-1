@@ -137,7 +137,8 @@ class TextLabel(GUIBase):
         self.Text = ""
 
     def refresh(self, screen):
-        super().refresh(screen)
+        if super().refresh(screen): #this means the super is invisible
+            return
         if self.Text == "":
             return
         ab_xs, ab_ys = self.AbsoluteSize

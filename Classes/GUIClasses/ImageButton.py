@@ -9,9 +9,10 @@ class ImageButton(SuperClass):
     ):
         super().__init__(
             "ImageButton",
-            ["Image", "Button", "TypingIn", "MouseDown", "MouseUp", "MouseClickOff"],
-            [],
+            ["Image", "Button", "TypingIn", "MouseDown", "MouseUp", "MouseClickOff", "Visible"],
+            ["Visible"],
         )
+        self.Visible = True
         self.Image = Image(
             Pos, Size, BackgroundColor, BackgroundTranspareny, ImagePath, zIndex + 1
         )
@@ -21,6 +22,8 @@ class ImageButton(SuperClass):
         self.MouseUp = self.Button.MouseUp
         self.MouseClickOff = self.Button.MouseClickOff
 
-    def refresh(self, screen):
-        self.Image.refresh(screen)
-        self.Button.refresh(screen)
+        def UpdateVisiblity(newVisiblity):
+            self.Image.Visible = newVisiblity
+            self.Button.Visible = newVisiblity
+        
+        self.GetPropertyChangedSignal("Visible", UpdateVisiblity)

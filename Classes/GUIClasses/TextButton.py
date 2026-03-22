@@ -27,8 +27,9 @@ class TextButton(SuperClass):
                 "MouseDown",
                 "MouseUp",
                 "MouseClickOff",
+                "Visible"
             ],
-            ["Text"],
+            ["Text", "Visible"],
         )
         self.TextLabel = TextLabel(
             Pos,
@@ -44,6 +45,13 @@ class TextButton(SuperClass):
         )
 
         self.Text = ""
+        self.Visible = True
+
+        def UpdateVisiblity(newVisiblity):
+            self.TextLabel.Visible = newVisiblity
+            self.Button.Visible = newVisiblity
+        
+        self.GetPropertyChangedSignal("Visible").Connect(UpdateVisiblity)
 
         def update_text(a):
             self.TextLabel.Text = a
@@ -55,7 +63,3 @@ class TextButton(SuperClass):
         self.MouseDown = self.Button.MouseDown
         self.MouseUp = self.Button.MouseUp
         self.MouseClickOff = self.Button.MouseClickOff
-
-    def refresh(self, screen):
-        self.TextLabel.refresh(screen)
-        self.Button.refresh(screen)

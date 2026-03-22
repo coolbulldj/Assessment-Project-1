@@ -1,6 +1,12 @@
 import pygame as py
 from .GUIBase import GUIBase
 
+CachedImages = {}
+
+def getImage(ImagePath:str):
+    if ImagePath not in CachedImages:
+        CachedImages[ImagePath] = py.image.load(ImagePath).convert_alpha()
+    return CachedImages[ImagePath]
 
 class Image(GUIBase):
     def __init__(
@@ -22,18 +28,24 @@ class Image(GUIBase):
             UIAspectRatio,
             "ImageLabel",
             ["ImagePath", "Image"],
-            [],
+            ["ImagePath"],
         )
         self.ImagePath = ImagePath
-        self.Image = py.image.load(ImagePath).convert_alpha()
+        self.Image = getImage(ImagePath)
+
+        def updateImage(newImagePath):
+            #print("updating image")
+            self.Image = getImage(newImagePath)
+
+        self.GetPropertyChangedSignal("ImagePath").Connect(updateImage)
 
     def refresh(self, screen):
-        super().refresh(screen)
+        if super().refresh(screen): #this means the super is invisible
+            #print(self.Visible)
+            return
 
         ab_xs, ab_ys = self.AbsoluteSize
-        pos_x, pos_y = self.AbsolutePos
 
-        pos = (pos_x + ab_xs / 2), (pos_y + ab_ys / 2)
 
         # Assets\MartianBackground.png
         # Resize the original image to a new width of 100 and height of 50

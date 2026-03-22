@@ -19,7 +19,7 @@ class Textbox(SuperClass):
         TextFont=1,
         zIndex=1,
     ):
-        super().__init__("Textbox", ["Textlabel", "Button", "TypingIn"], [])
+        super().__init__("Textbox", ["Textlabel", "Button", "TypingIn", "Visible"], ["Visible"])
         self.Textlabel = TextLabel(
             Pos,
             Size,
@@ -32,12 +32,19 @@ class Textbox(SuperClass):
         )
         B = Button(Pos, Size, BackgroundColor, zIndex)
         self.TypingIn = False
+        self.Visible = True
 
         B.MouseClickOff.Connect(self.stop_typing)
         B.MouseUp.Connect(self.start_typing)
         InputPress.Connect(self.typing)
 
         self.Button = B
+
+        def UpdateVisiblity(newVisiblity):
+            self.Textlabel.Visible = newVisiblity
+            self.Button.Visible = newVisiblity
+        
+        self.GetPropertyChangedSignal("Visible").Connect(UpdateVisiblity)
 
     def typing(self, keycode):
         if not is_valid_chr(keycode):
@@ -58,10 +65,6 @@ class Textbox(SuperClass):
         self.TypingIn = False
 
     def start_typing(self):
-        print("start_typing")
+        #print("start_typing")
         self.Textlabel.Text = ""
         self.TypingIn = True
-
-    def refresh(self, screen):
-        self.Textlabel.refresh(screen)
-        self.Button.refresh(screen)

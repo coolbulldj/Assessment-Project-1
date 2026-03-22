@@ -7,7 +7,6 @@ guiAssetList = []
 def clamp(value, minVal, maxVal):
     return max(minVal, min(value, maxVal))
 
-
 class GUIBase(SuperClass):
     def __init__(
         self,
@@ -30,6 +29,7 @@ class GUIBase(SuperClass):
             "UIAspectRatio",
             "AbsolutePos",
             "AbsoluteSize",
+            "Visible"
         ]
         SignalProperties = SignalProperties + [
             "Pos",
@@ -45,10 +45,13 @@ class GUIBase(SuperClass):
         self.BackgroundColor = Color
         self.BackgroundTransparency = clamp(BackgroundTransparency, 0, 1)
         self.zIndex = zIndex
+        self.Visible = True
         self.UIAspectRatio = UIAspectRatio
         guiAssetList.append(self)
 
     def refresh(self, screen):
+        if not self.Visible:
+            return True
         ScreenWidth, ScreenHeight = screen.get_size()
 
         xs, ys = self.Size

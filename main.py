@@ -41,6 +41,13 @@ OreProducion = random.randint(1, 40) + 80
 
 YEARS_TO_SURIVE = 10
 
+DEFAULT_SCREEN = "Assets\Background\SpaceMinesBGv3.png"
+
+#Loss Screens
+OVERWORK_LOSS_SCREEN = "Assets\Background\LoseScreens\OverworkedPopulationSpaceColony.png"
+REVOLT_LOSS_SCREEN = "Assets\Background\LoseScreens\SpaceColonyRevolt.png"
+NOT_ENOUGH_PEOPLE_SCREEN = r"Assets\Background\LoseScreens\NotEnoughPeopleSpaceColony.png"
+
 currentYear = 0
 oreInStorage = 0
 currentSafication = 1
@@ -228,14 +235,56 @@ def ProcessTranactions():
 
     return True
 
+    
 
-def DisplayLossOptions():
-    pass
 
 
 def DisplayMenuOptions():
-    pass
+    # Background stays visible
+    UIService.BackgroundImage.Visible = True
+    print(UIService.BackgroundImage.ImagePath)
+    #print(UIService.BackgroundImage.Visible)
+    UIService.QuitB.Visible = True
+    UIService.NewGameB.Visible = True
+    UIService.ContinueB.Visible = True
+    UIService.ErrorLabel.Visible = True
 
+    # Hide everything else
+    UIService.GlassFrame.Visible = False
+
+    UIService.SOALabel.Visible = False
+    UIService.MarketsLabel.Visible = False
+    UIService.DecisionsLabel.Visible = False
+
+    UIService.currentTermLabel.Visible = False
+    UIService.PopulationLabel.Visible = False
+    UIService.NumberOfMinesLabel.Visible = False
+    UIService.OreProductionLabel.Visible = False
+    UIService.OreInStorageLabel.Visible = False
+    UIService.currentSatifactionLabel.Visible = False
+
+    UIService.FoodPriceLabel.Visible = False
+    UIService.OrePriceLabel.Visible = False
+    UIService.MinesPriceLabel.Visible = False
+
+    UIService.CurrentBalLabel.Visible = False
+    UIService.RemainingBalLabel.Visible = False
+
+    UIService.SellMinesLabel.Visible = False
+    UIService.SellOreLabel.Visible = False
+    UIService.BuyMinesLabel.Visible = False
+    UIService.BuyFoodLabel.Visible = False
+
+    UIService.SellMinesTB.Visible = False
+    UIService.SellOreTB.Visible = False
+    UIService.BuyMinesTB.Visible = False
+    UIService.BuyFoodTB.Visible = False
+
+    UIService.NextTermB.Visible = False
+
+def DisplayLossOptions():
+    DisplayMenuOptions()
+    UIService.ContinueB.Visible = True
 
 def GoToNextTerm(StartingGame: bool = None):
     if not StartingGame and not ProcessTranactions():
@@ -269,10 +318,16 @@ def GoToNextTerm(StartingGame: bool = None):
     # Ways to lose (implement later)
     if currentSafication < 0.6:
         UIService.ErrorLabel.Text = "Your people revolted!"
+        UIService.BackgroundImage.ImagePath = REVOLT_LOSS_SCREEN
+        DisplayLossOptions()
     elif Population / NumberOfMines < 10:
         UIService.ErrorLabel.Text = "Your've overworked your population you require ten people per each of your mines"
+        UIService.BackgroundImage.ImagePath = OVERWORK_LOSS_SCREEN
+        DisplayLossOptions()
     elif Population < 30:
         UIService.ErrorLabel.Text = "You don't have enough people left"
+        UIService.BackgroundImage.ImagePath = NOT_ENOUGH_PEOPLE_SCREEN
+        DisplayLossOptions()
 
     if currentYear == YEARS_TO_SURIVE:
         UIService.ErrorLabel.Text = (

@@ -13,31 +13,15 @@ from Classes.GUIClasses.Textbox import Textbox
 import Services.UIService as UIService
 import Services.DataService as DataService
 
-UIService.SOALabel.Text = "State Of Affairs"
-UIService.MarketsLabel.Text = "Markets"
-UIService.DecisionsLabel.Text = "Decisions"
 
-UIService.currentTermLabel.Text = "Current Term: 10"
-UIService.PopulationLabel.Text = "Population, is ending world hunger"
-UIService.currentSatifactionLabel.Text = "Population Satifaction: 1"
-UIService.NumberOfMinesLabel.Text = "Mines Owned:100"
-UIService.OreProductionLabel.Text = "Ore Production Rate:34"
-UIService.OreInStorageLabel.Text = "Ore In Storage:8789(tons)"
-
-UIService.FoodPriceLabel.Text = "Food Price:100$"
-UIService.OrePriceLabel.Text = "Ore Price:50$"
-UIService.MinesPriceLabel.Text = "Mine Price:250$"
-
-UIService.CurrentBalLabel.Text = "Current Balance: 1000$"
-UIService.RemainingBalLabel.Text = "Remaining Balance: 0$"
+# Variables are set to zero because they get initizlized later down the line in different functions
+NumberOfMines = 0
+Population = 0
+Money = 0
+FoodPrice = 0
+OreProducion = 0
 
 
-# Variables
-NumberOfMines = random.randint(1, 3) + 5
-Population = random.randint(1, 60) + 40
-Money = (random.randint(1, 50) + 10) * Population
-FoodPrice = random.randint(1, 40) + 80
-OreProducion = random.randint(1, 40) + 80
 
 HARD_MODE_YEARS_TO_SURVIVE = 20
 NORMAL_MODE_YEARS_TO_SURVIVE = 10
@@ -65,7 +49,7 @@ running = True
 
 
 def DisplayStateOfAffairs():
-    UIService.currentTermLabel.Text = "Current Term:" + str(currentYear + 1)
+    UIService.currentTermLabel.Text = "Current Term:" + str(currentYear)
     UIService.PopulationLabel.Text = "Population:" + str(Population)
     UIService.NumberOfMinesLabel.Text = "Mines owned:" + str(NumberOfMines)
     UIService.OreProductionLabel.Text = (
@@ -188,6 +172,7 @@ def ProcessTranactions(): #Takes the content from the textboxes and converts the
 
     def CheckItem(TB: Textbox, Price, Buying: bool, MaxItemsInTransaction):
         if TB.Textlabel.Text == "":  # The textlabel isn't real
+
             return 0
         nonlocal RemainingBal
 
@@ -225,18 +210,19 @@ def ProcessTranactions(): #Takes the content from the textboxes and converts the
     NumberOfMines += CheckItem(
         UIService.BuyMinesTB, MinePrice, True, math.floor(RemainingBal / MinePrice)
     )
-    currentSatfication += (
-        CheckItem(
-            UIService.SellMinesTB, FoodPrice, True, math.floor(RemainingBal / FoodPrice)
+    foodPurchased = CheckItem(
+            UIService.BuyFoodTB, FoodPrice, True, math.floor(RemainingBal / FoodPrice)
         )
+    currentSatfication += (
+        foodPurchased
         / Population
         - 1
     )
 
     Money = RemainingBal
 
-def GenerateVariables():
-    global currentYear, OrePrice, MinePrice, oreInStorage, OreProducion
+def UpdateVariables(): #updates variables used after each term
+    global currentYear, OrePrice, MinePrice, oreInStorage, OreProducion, Population
 
     # Ensure all values
     currentYear += 1
@@ -247,14 +233,60 @@ def GenerateVariables():
     # Add ore produced
     oreInStorage += OreProducion * NumberOfMines
 
-
-
     if currentSatfication > 1.1:
         OreProducion += random.randint(1, 20) + 1
+        Population += min(Population * (1 - currentSatfication), 15) #ensure population growth can't exceed 15 people
     elif currentSatfication < 0.9:
         OreProducion -= random.randint(1, 20) + 1
+        Population -= min(Population * (1 - currentSatfication), 15) #ensure population growth can't exceed 15 people
 
     OreProducion = max(65, OreProducion) #Ensure ore production per mine doesn't drop below 60
+    ToggleAllUIVisiblity(False)
+
+    UIService.HardModeB.Visible = True
+
+def Events():
+    #Events famine, radioactive leak, immgration boom, ore glut, gold rush
+    EventRan = random.random()
+    UIService.ErrorLabel.Text = "Radioactive Leak"
+    UIService.ErrorLabel.TextColor = (6, 209, 60) #green
+    if EventRan <= 0.05: #5 percent probality, radioactive leak
+        UIService.ErrorLabel.Text = "Radioactive Leak"
+        UIService.ErrorLabel.TextColor = (6, 209, 60) #green
+    elif EventRan <= 0.15: #10 percent probality, immgration boom
+        pass
+    elif EventRan <= 50: #20 percent probality
+        pass
+    elif EventRan <= 70: #20 percent probality
+        pass
+
+def GoToNextTerm():
+    ProcessTranactions()
+
+    global running
+    
+    UpdateVariables()
+    Events()
+    DisplayStateOfAffairs()
+    
+    # Ways to lose (implement later)
+    if currentSatfication < 0.6:
+        UIService.ErrorLabel.Text = "Your people revolted! Aim to buy 1 unit of food per person"
+        UIService.BackgroundImage.ImagePath = REVOLT_LOSS_SCREEN
+        DisplayLossOptions()
+    elif Population / NumberOfMines < 10:
+        UIService.ErrorLabel.Text = "Your've overworked your population you require ten people per each of your mines"
+        UIService.BackgroundImage.ImagePath = OVERWORK_LOSS_SCREEN
+        DisplayLossOptions()
+    elif Population < 30:
+        UIService.ErrorLabel.Text = "You don't have enough people left"
+        UIService.BackgroundImage.ImagePath = NOT_ENOUGH_PEOPLE_SCREEN
+        DisplayLossOptions()
+
+    if currentYear == (yearsToSurvive+1): #Add one as current year starts a 1 therefore all terms are completed by the year surivived plus 1
+        UIService.ErrorLabel.Text = (
+            f"Your've surived your {yearsToSurvive} terms in office"
+        )
 
 def ToggleAllUIVisiblity(Toggle:bool):
     # Background stays visible
@@ -324,38 +356,7 @@ def DisplayLossOptions():
     UIService.ContinueB.Visible = True
 
 def StartMenuOptions():
-    ToggleAllUIVisiblity(False)
-
-    UIService.HardModeB.Visible = True
-
-
-def GoToNextTerm():
-
-
-    ProcessTranactions()
-
-    global running
-    
-    DisplayStateOfAffairs()
-    
-    # Ways to lose (implement later)
-    if currentSatfication < 0.6:
-        UIService.ErrorLabel.Text = "Your people revolted!"
-        UIService.BackgroundImage.ImagePath = REVOLT_LOSS_SCREEN
-        DisplayLossOptions()
-    elif Population / NumberOfMines < 10:
-        UIService.ErrorLabel.Text = "Your've overworked your population you require ten people per each of your mines"
-        UIService.BackgroundImage.ImagePath = OVERWORK_LOSS_SCREEN
-        DisplayLossOptions()
-    elif Population < 30:
-        UIService.ErrorLabel.Text = "You don't have enough people left"
-        UIService.BackgroundImage.ImagePath = NOT_ENOUGH_PEOPLE_SCREEN
-        DisplayLossOptions()
-
-    if currentYear == yearsToSurvive:
-        UIService.ErrorLabel.Text = (
-            f"Your've surived your {yearsToSurvive} terms in office"
-        )
+    pass
 
 def HideMenuOptions():
     UIService.QuitB.Visible = False
@@ -383,16 +384,25 @@ def CreateNewGame():
     UIService.StartGameB.Visible = True
 
 def StartNewGame():
+    global NumberOfMines, Population, Money, FoodPrice, OreProducion
+
     ToggleAllUIVisiblity(True)
     HideMenuOptions()
-    
-    GenerateVariables()
+
+    #Determine Starting variables
+    NumberOfMines = random.randint(1, 3) + 5
+    Population = random.randint(1, 60) + 40
+    Money = (random.randint(1, 50) + 10) * Population
+    FoodPrice = random.randint(1, 20) + 20
+    OreProducion = random.randint(1, 40) + 80
+
+    UpdateVariables()
     DisplayStateOfAffairs()
 
 def LoadPreviousGame():
     global NumberOfMines, Population, Money, FoodPrice, OreProducion, currentYear, oreInStorage, currentSatfication, OrePrice, MinePrice
     data = DataService.readData()
-    print(data)
+
     NumberOfMines = data["NumberOfMines"]
     Population = data["Population"]
     Money = data["Money"]

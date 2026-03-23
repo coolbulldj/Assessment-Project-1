@@ -1,3 +1,9 @@
+#PLEASE READ BELOW
+#note to reader this file serves no real purpose to the program, it's simply here to show 
+#the evolution of the program. This file was first developed to create a prototype for 
+#the game allowing for me reference this code while developing the main project  
+
+
 import random
 import math
 

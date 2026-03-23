@@ -2,6 +2,7 @@ from Classes.SuperClass import SuperClass
 from .Button import Button
 from .TextLabel import TextLabel
 from Services.InputService import InputPress
+# import traceback
 
 
 def is_valid_chr(n):
@@ -46,6 +47,14 @@ class Textbox(SuperClass):
         
         self.GetPropertyChangedSignal("Visible").Connect(UpdateVisiblity)
 
+        # def debugCallback(_):
+        #     print("\n")
+        #     traceback.print_stack()
+        #     print(self.Textlabel.Text)
+        #     print("\n")
+
+        # self.Textlabel.GetPropertyChangedSignal("Text").Connect(debugCallback)
+
     def typing(self, keycode):
         if not is_valid_chr(keycode):
             # keycode is not able to be translated to a string therefore remove it
@@ -65,6 +74,5 @@ class Textbox(SuperClass):
         self.TypingIn = False
 
     def start_typing(self):
-        #print("start_typing")
         self.Textlabel.Text = ""
         self.TypingIn = True

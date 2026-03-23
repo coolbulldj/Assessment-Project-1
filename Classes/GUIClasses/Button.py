@@ -33,6 +33,8 @@ class Button(GUIBase):
         buttonList["MouseDown"].append(self.FireMouseDown)
 
     def FireMouseDown(self, screen, MousePos):
+        if not self.Visible: #invisible objects can't detect button presses
+            return
         xs, ys = screen.get_size()
         xm, ym = MousePos
         scaledMousePos = (xm / xs, ym / ys)
@@ -42,6 +44,8 @@ class Button(GUIBase):
             self.MouseClickOff._FireEvent()
 
     def FireMouseUp(self, screen, MousePos):
+        if not self.Visible: #invisible objects can't detect button presses
+            return
         xs, ys = screen.get_size()
         xm, ym = MousePos
         scaledMousePos = (xm / xs, ym / ys)

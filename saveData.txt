@@ -1,6 +1,6 @@
 NumberOfMines ;:; 8
 Population ;:; 68
-Money ;:; 183603890
+Money ;:; 999999999
 FoodPrice ;:; 110
 OreProducion ;:; 96
 currentYear ;:; 1

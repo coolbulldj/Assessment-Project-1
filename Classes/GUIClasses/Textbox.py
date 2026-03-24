@@ -8,7 +8,6 @@ from Services.InputService import InputPress
 def is_valid_chr(n):
     return isinstance(n, int) and 0 <= n <= 0x10FFFF
 
-
 class Textbox(SuperClass):
     def __init__(
         self,

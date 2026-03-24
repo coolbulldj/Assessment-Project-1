@@ -434,7 +434,7 @@ def LoadPreviousGame():
     currentSatfication = data["currentSatfication"]
     OrePrice = data["OrePrice"]
     MinePrice = data["MinePrice"]
-    
+
 
 
 #Note these button functions here provide a Callback for button callback list,

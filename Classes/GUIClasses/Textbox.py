@@ -45,6 +45,7 @@ class Textbox(SuperClass):
             self.Button.Visible = newVisiblity
         
         self.GetPropertyChangedSignal("Visible").Connect(UpdateVisiblity)
+        
 
         # def debugCallback(_):
         #     print("\n")
@@ -70,8 +71,10 @@ class Textbox(SuperClass):
         self.Textlabel.Text = SetText
 
     def stop_typing(self):
+        self.Textlabel.BorderThickness = 0
         self.TypingIn = False
 
     def start_typing(self):
+        self.Textlabel.BorderThickness = 1
         self.Textlabel.Text = ""
         self.TypingIn = True

@@ -38,7 +38,8 @@ class Button(GUIBase):
         xs, ys = screen.get_size()
         xm, ym = MousePos
         scaledMousePos = (xm / xs, ym / ys)
-        if PointInsideRectange(self.Size, self.Pos, scaledMousePos):
+        validClick = PointInsideRectange(self.Size, self.Pos, scaledMousePos)
+        if validClick:
             self.MouseDown._FireEvent()
         else:
             self.MouseClickOff._FireEvent()
@@ -49,7 +50,8 @@ class Button(GUIBase):
         xs, ys = screen.get_size()
         xm, ym = MousePos
         scaledMousePos = (xm / xs, ym / ys)
-        if PointInsideRectange(self.Size, self.Pos, scaledMousePos):
+        validClick = PointInsideRectange(self.Size, self.Pos, scaledMousePos)
+        if validClick:
             self.MouseUp._FireEvent()
         else:
             self.MouseClickOff._FireEvent()

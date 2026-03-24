@@ -1,4 +1,4 @@
-FILE_PATH = "saveData.txt"
+DATA_FILE_PATH = "saveData.txt"
 SEPERATOR_KEY = " ;:; "
 
 STRING_TO_BOOL = {
@@ -9,42 +9,41 @@ STRING_TO_BOOL = {
 # https://www.w3schools.com/python/python_file_open.asp source reference ()
 
 
-def writeData(data):
+def writeData(GameData):
 
     # file = open(FILE_PATH)
 
     # file.close()
 
     # Using the with open means file doesn't have to be closed
-    with open(FILE_PATH, "w") as f: #uses w rather than a because w fully clears the file
-        for key, val in data.items():
+    with open(DATA_FILE_PATH, "w") as f: #uses w rather than a because w fully clears the file
+        for key, val in GameData.items():
             f.write(key + SEPERATOR_KEY + str(val) + "\n") #\n create a new line
 
     # Read for debugging
     # with open(FILE_PATH) as f:
     #     print(f.read())
-    testReturn = readData()
 
 
-def attemptDataTypeConvertion(val):
+def attemptDataTypeConvertion(StringVariable):
     #attempt to convert to boolean
-    if val in STRING_TO_BOOL:
-        return STRING_TO_BOOL[val]
+    if StringVariable in STRING_TO_BOOL:
+        return STRING_TO_BOOL[StringVariable]
 
     #attempt to convert to int
     try:
-        n = int(val)
+        n = int(StringVariable)
         return n
     except ValueError:
         pass
 
-    return val
+    return StringVariable
 
 
 def readData():
-    data = {}
+    GameData = {}
 
-    with open(FILE_PATH) as f:
+    with open(DATA_FILE_PATH) as f:
         for line in f:
             slicedLine = line.split(SEPERATOR_KEY)
             #print(slicedLine)
@@ -55,9 +54,10 @@ def readData():
 
             # print(key, "key")
             # print(val, "val")
-            data[key] = attemptDataTypeConvertion(val)
+            ConvertedValue = attemptDataTypeConvertion(val)
+            GameData[key] = ConvertedValue
     
-    return data
+    return GameData
 
 
     

@@ -29,7 +29,9 @@ class GUIBase(SuperClass):
             "UIAspectRatio",
             "AbsolutePos",
             "AbsoluteSize",
-            "Visible"
+            "Visible",
+            "BorderThickness",
+            "BorderColor"
         ]
         SignalProperties = SignalProperties + [
             "Pos",
@@ -47,6 +49,9 @@ class GUIBase(SuperClass):
         self.zIndex = zIndex
         self.Visible = True
         self.UIAspectRatio = UIAspectRatio
+        #add ts please
+        self.BorderThickness = 0
+        self.BorderColor = (255,0,255)
         guiAssetList.append(self)
 
     def refresh(self, screen):
@@ -75,7 +80,9 @@ class GUIBase(SuperClass):
 
         rectDetails = py.Rect(xp, yp, xs, ys)
 
-        py.draw.rect(screen, self.BackgroundColor, rectDetails, 0)
+        py.draw.rect(screen, self.BackgroundColor, rectDetails)
+        if self.BorderThickness > 0:
+            py.draw.rect(screen, self.BorderColor, rectDetails, self.BorderThickness)
 
 
 def GetGuiAssets():

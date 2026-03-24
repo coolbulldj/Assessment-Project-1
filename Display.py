@@ -8,8 +8,6 @@ BACKGROUND_COLOR = (0, 0, 255)
 
 screen = py.display.set_mode((800, 450), py.RESIZABLE)
 
-running = True
-
 
 def TickDisplay():
     global screen

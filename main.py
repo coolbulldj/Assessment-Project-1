@@ -39,18 +39,24 @@ Money = (random.randint(1, 50) + 10) * Population
 FoodPrice = random.randint(1, 40) + 80
 OreProducion = random.randint(1, 40) + 80
 
-YEARS_TO_SURIVE = 10
+HARD_MODE_YEARS_TO_SURVIVE = 20
+NORMAL_MODE_YEARS_TO_SURVIVE = 10
+EASY_MODE_YEARS_TO_SURVIVE = 5
 
-DEFAULT_SCREEN = "Assets\Background\SpaceMinesBGv3.png"
+yearsToSurvive = NORMAL_MODE_YEARS_TO_SURVIVE
+
+
+
+DEFAULT_SCREEN = r"Assets\Background\SpaceMinesBGv3.png"
 
 #Loss Screens
-OVERWORK_LOSS_SCREEN = "Assets\Background\LoseScreens\OverworkedPopulationSpaceColony.png"
-REVOLT_LOSS_SCREEN = "Assets\Background\LoseScreens\SpaceColonyRevolt.png"
+OVERWORK_LOSS_SCREEN = r"Assets\Background\LoseScreens\OverworkedPopulationSpaceColony.png"
+REVOLT_LOSS_SCREEN = r"Assets\Background\LoseScreens\SpaceColonyRevolt.png"
 NOT_ENOUGH_PEOPLE_SCREEN = r"Assets\Background\LoseScreens\NotEnoughPeopleSpaceColony.png"
 
 currentYear = 0
 oreInStorage = 0
-currentSafication = 1
+currentSatfication = 1
 
 OrePrice = 0
 MinePrice = 0
@@ -128,7 +134,7 @@ def UpdateTransactionBalance(_):
 
     global NumberOfMines
     global oreInStorage
-    global currentSafication
+    global currentSatfication
 
     # NumberOfMines -= CheckItem(UIService.SellMinesTB, MinePrice, False, NumberOfMines)
     # oreInStorage -= CheckItem(UIService.SellOreTB, OrePrice, False, oreInStorage)
@@ -156,15 +162,11 @@ def SaveData():
             "OreProducion": OreProducion,
             "currentYear": currentYear,
             "oreInStorage": oreInStorage,
-            "currentSafication": currentSafication,
+            "currentSatfication": currentSatfication,
             "OrePrice": OrePrice,
             "MinePrice": MinePrice,
         }
     )
-
-def LoadData():
-    data = DataService.readData()
-
 
 UIService.SellMinesTB.Textlabel.GetPropertyChangedSignal("Text").Connect(
     UpdateTransactionBalance
@@ -180,7 +182,7 @@ UIService.BuyFoodTB.Textlabel.GetPropertyChangedSignal("Text").Connect(
 )
 
 
-def ProcessTranactions():
+def ProcessTranactions(): #Takes the content from the textboxes and converts them to numbers then adds them to connected variable
     global Money
     RemainingBal = Money
 
@@ -216,14 +218,14 @@ def ProcessTranactions():
 
     global NumberOfMines
     global oreInStorage
-    global currentSafication
+    global currentSatfication
 
     NumberOfMines -= CheckItem(UIService.SellMinesTB, MinePrice, False, NumberOfMines)
     oreInStorage -= CheckItem(UIService.SellOreTB, OrePrice, False, oreInStorage)
     NumberOfMines += CheckItem(
         UIService.BuyMinesTB, MinePrice, True, math.floor(RemainingBal / MinePrice)
     )
-    currentSafication += (
+    currentSatfication += (
         CheckItem(
             UIService.SellMinesTB, FoodPrice, True, math.floor(RemainingBal / FoodPrice)
         )
@@ -233,68 +235,8 @@ def ProcessTranactions():
 
     Money = RemainingBal
 
-    return True
-
-    
-
-
-
-def DisplayMenuOptions():
-    # Background stays visible
-    UIService.BackgroundImage.Visible = True
-    #print(UIService.BackgroundImage.Visible)
-    UIService.QuitB.Visible = True
-    UIService.NewGameB.Visible = True
-    UIService.ContinueB.Visible = True
-    UIService.ErrorLabel.Visible = True
-
-    # Hide everything else
-    UIService.GlassFrame.Visible = False
-
-    UIService.SOALabel.Visible = False
-    UIService.MarketsLabel.Visible = False
-    UIService.DecisionsLabel.Visible = False
-
-    UIService.currentTermLabel.Visible = False
-    UIService.PopulationLabel.Visible = False
-    UIService.NumberOfMinesLabel.Visible = False
-    UIService.OreProductionLabel.Visible = False
-    UIService.OreInStorageLabel.Visible = False
-    UIService.currentSatifactionLabel.Visible = False
-
-    UIService.FoodPriceLabel.Visible = False
-    UIService.OrePriceLabel.Visible = False
-    UIService.MinesPriceLabel.Visible = False
-
-    UIService.CurrentBalLabel.Visible = False
-    UIService.RemainingBalLabel.Visible = False
-
-    UIService.SellMinesLabel.Visible = False
-    UIService.SellOreLabel.Visible = False
-    UIService.BuyMinesLabel.Visible = False
-    UIService.BuyFoodLabel.Visible = False
-
-    UIService.SellMinesTB.Visible = False
-    UIService.SellOreTB.Visible = False
-    UIService.BuyMinesTB.Visible = False
-    UIService.BuyFoodTB.Visible = False
-
-    UIService.NextTermB.Visible = False
-
-def DisplayLossOptions():
-    DisplayMenuOptions()
-    UIService.ContinueB.Visible = True
-
-def GoToNextTerm(StartingGame: bool = None):
-    if not StartingGame and not ProcessTranactions():
-        return
-
-    global currentYear
-    global OrePrice
-    global MinePrice
-    global oreInStorage
-    global OreProducion
-    global running
+def GenerateVariables():
+    global currentYear, OrePrice, MinePrice, oreInStorage, OreProducion
 
     # Ensure all values
     currentYear += 1
@@ -305,17 +247,99 @@ def GoToNextTerm(StartingGame: bool = None):
     # Add ore produced
     oreInStorage += OreProducion * NumberOfMines
 
-    DisplayStateOfAffairs()
 
-    # Reset Textbox Values
 
-    if currentSafication > 1.1:
+    if currentSatfication > 1.1:
         OreProducion += random.randint(1, 20) + 1
-    elif currentSafication < 0.9:
+    elif currentSatfication < 0.9:
         OreProducion -= random.randint(1, 20) + 1
 
+    OreProducion = max(65, OreProducion) #Ensure ore production per mine doesn't drop below 60
+
+def ToggleAllUIVisiblity(Toggle:bool):
+    # Background stays visible
+    UIService.BackgroundImage.Visible = Toggle
+    #print(UIService.BackgroundImage.Visible)
+    UIService.QuitB.Visible = Toggle
+    UIService.NewGameB.Visible = Toggle
+    UIService.ContinueB.Visible = Toggle
+    UIService.ErrorLabel.Visible = Toggle
+
+    # Hide everything else
+    UIService.GlassFrame.Visible = Toggle
+
+    UIService.SOALabel.Visible = Toggle
+    UIService.MarketsLabel.Visible = Toggle
+    UIService.DecisionsLabel.Visible = Toggle
+
+    UIService.currentTermLabel.Visible = Toggle
+    UIService.PopulationLabel.Visible = Toggle
+    UIService.NumberOfMinesLabel.Visible = Toggle
+    UIService.OreProductionLabel.Visible = Toggle
+    UIService.OreInStorageLabel.Visible = Toggle
+    UIService.currentSatifactionLabel.Visible = Toggle
+
+    UIService.FoodPriceLabel.Visible = Toggle
+    UIService.OrePriceLabel.Visible = Toggle
+    UIService.MinesPriceLabel.Visible = Toggle
+
+    UIService.CurrentBalLabel.Visible = Toggle
+    UIService.RemainingBalLabel.Visible = Toggle
+
+    UIService.SellMinesLabel.Visible = Toggle
+    UIService.SellOreLabel.Visible = Toggle
+    UIService.BuyMinesLabel.Visible = Toggle
+    UIService.BuyFoodLabel.Visible = Toggle
+
+    UIService.SellMinesTB.Visible = Toggle
+    UIService.SellOreTB.Visible = Toggle
+    UIService.BuyMinesTB.Visible = Toggle
+    UIService.BuyFoodTB.Visible = Toggle
+
+    UIService.NextTermB.Visible = Toggle
+
+    UIService.QuitB.Visible = Toggle
+    UIService.NewGameB.Visible = Toggle
+    UIService.ContinueB.Visible = Toggle
+
+    UIService.HardModeB.Visible = Toggle
+    UIService.NormalModeB.Visible = Toggle
+    UIService.EasyModeB.Visible = Toggle
+    UIService.StartGameB.Visible = Toggle
+
+def DisplayMenuOptions():
+    ToggleAllUIVisiblity(False)
+
+    # Background stays visible
+    UIService.BackgroundImage.Visible = True
+    #print(UIService.BackgroundImage.Visible)
+    UIService.QuitB.Visible = True
+    UIService.NewGameB.Visible = True
+    UIService.ContinueB.Visible = True
+    UIService.ErrorLabel.Visible = True
+
+def DisplayLossOptions():
+    ToggleAllUIVisiblity(False)
+    DisplayMenuOptions()
+    UIService.ContinueB.Visible = True
+
+def StartMenuOptions():
+    ToggleAllUIVisiblity(False)
+
+    UIService.HardModeB.Visible = True
+
+
+def GoToNextTerm():
+
+
+    ProcessTranactions()
+
+    global running
+    
+    DisplayStateOfAffairs()
+    
     # Ways to lose (implement later)
-    if currentSafication < 0.6:
+    if currentSatfication < 0.6:
         UIService.ErrorLabel.Text = "Your people revolted!"
         UIService.BackgroundImage.ImagePath = REVOLT_LOSS_SCREEN
         DisplayLossOptions()
@@ -328,20 +352,88 @@ def GoToNextTerm(StartingGame: bool = None):
         UIService.BackgroundImage.ImagePath = NOT_ENOUGH_PEOPLE_SCREEN
         DisplayLossOptions()
 
-    if currentYear == YEARS_TO_SURIVE:
+    if currentYear == yearsToSurvive:
         UIService.ErrorLabel.Text = (
-            f"Your've surived your {YEARS_TO_SURIVE} terms in office"
+            f"Your've surived your {yearsToSurvive} terms in office"
         )
 
+def HideMenuOptions():
+    UIService.QuitB.Visible = False
+    UIService.NewGameB.Visible = False
+    UIService.ContinueB.Visible = False
+    UIService.ErrorLabel.Visible = False
 
+    UIService.EasyModeB.Visible = False
+    UIService.NormalModeB.Visible = False
+    UIService.HardModeB.Visible = False
+
+    UIService.StartGameB.Visible = False
+
+def QuitGame():
+    global running
+    running = False
+
+def CreateNewGame():
+    ToggleAllUIVisiblity(False)
+
+    UIService.EasyModeB.Visible = True
+    UIService.NormalModeB.Visible = True
+    UIService.HardModeB.Visible = True
+
+    UIService.StartGameB.Visible = True
+
+def StartNewGame():
+    ToggleAllUIVisiblity(True)
+    HideMenuOptions()
+    
+    GenerateVariables()
+    DisplayStateOfAffairs()
+
+def LoadPreviousGame():
+    global NumberOfMines, Population, Money, FoodPrice, OreProducion, currentYear, oreInStorage, currentSatfication, OrePrice, MinePrice
+    data = DataService.readData()
+    print(data)
+    NumberOfMines = data["NumberOfMines"]
+    Population = data["Population"]
+    Money = data["Money"]
+    FoodPrice = data["FoodPrice"]
+    OreProducion = OreProducion["OreProduction"]
+    currentYear = data["currentYear"]
+    oreInStorage = data["OreInStorage"]
+    currentSatfication = data["currentSatfication"]
+    OrePrice = data["OrePrice"]
+    MinePrice = data["MinePrice"]
+
+
+#Note these button functions here provide a Callback for button callback list,
+#they are then called from the ClickCB in the main loop
 UIService.NextTermB.MouseUp.Connect(GoToNextTerm)
-GoToNextTerm(True)
+UIService.QuitB.MouseUp.Connect(QuitGame)
+UIService.NewGameB.MouseUp.Connect(CreateNewGame)
+UIService.ContinueB.MouseUp.Connect(LoadPreviousGame)
 
+def EasyMode():
+    global yearsToSurvive
+    yearsToSurvive = EASY_MODE_YEARS_TO_SURVIVE
 
-# 0.875
+def NormalMode():
+    global yearsToSurvive
+    yearsToSurvive = NORMAL_MODE_YEARS_TO_SURVIVE
+
+def HardMode():
+    global yearsToSurvive
+    yearsToSurvive = HARD_MODE_YEARS_TO_SURVIVE
+
+UIService.EasyModeB.MouseUp.Connect(EasyMode)
+UIService.NormalModeB.MouseUp.Connect(NormalMode)
+UIService.HardModeB.MouseUp.Connect(HardMode)
+
+UIService.StartGameB.MouseUp.Connect(StartNewGame)
+
 
 
 def main():
+    DisplayMenuOptions()
     LastFrameTime = time.time()
 
     ElapedTime = 0

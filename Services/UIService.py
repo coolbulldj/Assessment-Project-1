@@ -176,3 +176,16 @@ NewGameB.Text = "New Game"
 
 ContinueB = TextButton((0.7, 0.9), (0.15, 0.05), (255, 255, 255), 0, (0, 0, 0))
 ContinueB.Text = "Continue"
+
+#Start Options
+StartGameB = TextButton((0.5, 0.7), (0.15, 0.05), (255, 255, 255), 0, (0, 0, 0))
+StartGameB.Text = "Start Game"
+
+EasyModeB = TextButton((0.7, 0.5), (0.15, 0.05), (255, 255, 255), 0, (0, 0, 0))
+EasyModeB.Text = "Easy Mode"
+
+NormalModeB = TextButton((0.5, 0.5), (0.15, 0.05), (255, 255, 255), 0, (0, 0, 0))
+NormalModeB.Text = "Normal Mode"
+
+HardModeB = TextButton((0.3, 0.5), (0.15, 0.05), (255, 255, 255), 0, (0, 0, 0))
+HardModeB.Text = "Hard Mode"
